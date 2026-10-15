@@ -15,17 +15,18 @@
     
     /* INTERFAZ PRINCIPAL */
     #topBar {
-      display: flex; gap: 20px; align-items: center; margin-bottom: 10px;
-      background: rgba(25, 12, 40, 0.9); padding: 10px 25px; border-radius: 12px;
+      display: flex; gap: 15px; align-items: center; margin-bottom: 10px;
+      background: rgba(25, 12, 40, 0.9); padding: 10px 20px; border-radius: 12px;
       border: 2px solid #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+      z-index: 5;
     }
-    .stat { font-size: 1.3rem; text-shadow: 2px 2px 0 #000; }
+    .stat { font-size: 1.2rem; text-shadow: 2px 2px 0 #000; }
     .money { color: #00ff66; }
     .wave { color: #ff0055; }
     
     .btn-ui {
       background: linear-gradient(180deg, #ffd700, #ff8800); border: none;
-      color: #000; padding: 8px 18px; font-size: 1.1rem; font-weight: bold;
+      color: #000; padding: 8px 16px; font-size: 1rem; font-weight: bold;
       border-radius: 20px; cursor: pointer; transition: 0.2s;
       box-shadow: 0 4px 0 #b35900;
     }
@@ -44,16 +45,16 @@
     }
     .modal-content {
       background: #1a0c2e; border: 3px solid #ffd700; border-radius: 15px;
-      padding: 25px; width: 80%; max-width: 500px; text-align: center;
+      padding: 25px; width: 85%; max-width: 480px; text-align: center;
       box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
     }
 
     /* RARIDADES */
-    .rarity-Común { color: #aaaaaa; }
-    .rarity-PocoComún { color: #00ff66; }
-    .rarity-Épico { color: #a335ee; }
+    .rarity-Comun { color: #aaaaaa; }
+    .rarity-PocoComun { color: #00ff66; }
+    .rarity-Epico { color: #a335ee; }
     .rarity-Legendario { color: #ff8000; }
-    .rarity-Mítico { color: #ff0055; text-shadow: 0 0 10px #ff0055; }
+    .rarity-Mitico { color: #ff0055; text-shadow: 0 0 10px #ff0055; }
 
     /* INVENTARIO LIST */
     .inventory-grid {
@@ -79,12 +80,19 @@
 
   <!-- BARRA DE ESTADÍSTICAS E INTERFAZ -->
   <div id="topBar">
-    <div class="stat money">💰 $<span id="moneyTxt">0</span></div>
+    <div class="stat money">💰 $<span id="moneyTxt">100</span></div>
     <div class="stat wave">🌊 OLEAJE: <span id="waveTxt">1</span></div>
     <button class="btn-ui" onclick="toggleGame()" id="startBtn">▶ INICIAR OLEADA</button>
-    <button class="btn-ui" style="background: linear-gradient(180deg, #a335ee, #55288c); color:#fff;" onclick="openShop()">🎰 TIENDA GACHA ($50)</button>
-    <button class="btn-ui" style="background
-    loop();
-  </script>
-</body>
-</html>
+    <button class="btn-ui" style="background: linear-gradient(180deg, #a335ee, #55288c); color:#fff;" onclick="openShop()">🎰 TIENDA ($50)</button>
+    <button class="btn-ui" style="background: linear-gradient(180deg, #00f2fe, #006699); color:#fff;" onclick="openInventory()">🎒 INVENTARIO</button>
+  </div>
+
+  <!-- CANVAS PRINCIPAL DE JUEGO -->
+  <div id="gameArea">
+    <canvas id="canvas" width="800" height="420"></canvas>
+
+    <!-- MODAL TIENDA GACHA -->
+    <div class="modal" id="shopModal">
+      <div class="modal-content">
+        <h2>🎰 TIENDA DE STANDS 🎰</h2>
+        <p>Costo por Giro: <b style="color:#00ff
