@@ -3,341 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>⚡ JOJO'S BIZARRE BATTLEGROUND 2D ⚡</title>
+  <title>⚡ JOJO'S GACHA BATTLEGROUNDS 2D ⚡</title>
   <style>
-    * {
-      box-sizing: border-box;
-      user-select: none;
-    }
+    * { box-sizing: border-box; user-select: none; }
     body {
-      margin: 0;
-      padding: 0;
-      background: #0d0614;
-      color: #fff;
-      font-family: 'Impact', 'Arial Black', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      overflow: hidden;
+      margin: 0; padding: 0; background: #08040d; color: #fff;
+      font-family: 'Impact', 'Segoe UI', sans-serif;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 100vh; overflow: hidden;
     }
-    h1 {
-      margin: 10px 0 5px 0;
-      color: #ff0055;
-      text-shadow: 0 0 10px #ff0055, 3px 3px 0 #ffd700;
-      letter-spacing: 2px;
-      font-size: 2rem;
+    
+    /* INTERFAZ PRINCIPAL */
+    #topBar {
+      display: flex; gap: 20px; align-items: center; margin-bottom: 10px;
+      background: rgba(25, 12, 40, 0.9); padding: 10px 25px; border-radius: 12px;
+      border: 2px solid #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
     }
-    #gameContainer {
-      position: relative;
-      border: 4px solid #ffd700;
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-      border-radius: 8px;
-      overflow: hidden;
+    .stat { font-size: 1.3rem; text-shadow: 2px 2px 0 #000; }
+    .money { color: #00ff66; }
+    .wave { color: #ff0055; }
+    
+    .btn-ui {
+      background: linear-gradient(180deg, #ffd700, #ff8800); border: none;
+      color: #000; padding: 8px 18px; font-size: 1.1rem; font-weight: bold;
+      border-radius: 20px; cursor: pointer; transition: 0.2s;
+      box-shadow: 0 4px 0 #b35900;
     }
-    canvas {
-      display: block;
-      background: #1a0f2b;
+    .btn-ui:hover { transform: scale(1.05); }
+    .btn-ui:active { transform: translateY(3px); box-shadow: 0 1px 0 #b35900; }
+
+    /* CONTENEDOR DEL JUEGO */
+    #gameArea { position: relative; border: 4px solid #3d1e6d; border-radius: 10px; overflow: hidden; }
+    canvas { display: block; background: #120822; }
+
+    /* OVERLAYS Y MENÚS */
+    .modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); display: none; flex-direction: column;
+      align-items: center; justify-content: center; z-index: 10;
     }
-    .controls-panel {
-      margin-top: 10px;
-      background: rgba(20, 10, 35, 0.8);
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: 1px solid #ff0055;
-      display: flex;
-      gap: 20px;
-      font-size: 0.9rem;
-      color: #00f2fe;
+    .modal-content {
+      background: #1a0c2e; border: 3px solid #ffd700; border-radius: 15px;
+      padding: 25px; width: 80%; max-width: 500px; text-align: center;
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
     }
-    .key {
-      background: #ffd700;
-      color: #000;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-weight: bold;
+
+    /* RARIDADES */
+    .rarity-Común { color: #aaaaaa; }
+    .rarity-PocoComún { color: #00ff66; }
+    .rarity-Épico { color: #a335ee; }
+    .rarity-Legendario { color: #ff8000; }
+    .rarity-Mítico { color: #ff0055; text-shadow: 0 0 10px #ff0055; }
+
+    /* INVENTARIO LIST */
+    .inventory-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+      max-height: 200px; overflow-y: auto; margin: 15px 0; padding: 5px;
     }
+    .stand-card {
+      background: #281343; border: 2px solid #55288c; border-radius: 8px;
+      padding: 10px; cursor: pointer; transition: 0.2s;
+    }
+    .stand-card:hover { border-color: #ffd700; transform: scale(1.02); }
+    .stand-card.equipped { border-color: #00ff66; background: #183d25; }
+
+    /* CONTROLES FOOTER */
+    .controls {
+      margin-top: 10px; font-size: 0.85rem; color: #00f2fe;
+      display: flex; gap: 15px; background: rgba(0,0,0,0.5); padding: 6px 15px; border-radius: 20px;
+    }
+    .key { background: #ffd700; color: #000; padding: 1px 5px; border-radius: 3px; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <h1>⚡ JOJO'S BATTLEGROUND 2D ⚡</h1>
-
-  <div id="gameContainer">
-    <canvas id="canvas" width="800" height="450"></canvas>
-  </div>
-
-  <div class="controls-panel">
-    <div><span class="key">A</span> / <span class="key">D</span> Moverse</div>
-    <div><span class="key">W</span> / <span class="key">Espacio</span> Saltar</div>
-    <div><span class="key">Shift</span> Invoque Stand (Star Platinum)</div>
-    <div><span class="key">Z</span> ORA BARRAGE</div>
-    <div><span class="key">X</span> ZA WARUDO (Stop Time)</div>
-  </div>
-
-  <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-
-    // Teclas presionadas
-    const keys = {};
-    window.addEventListener('keydown', e => keys[e.code] = true);
-    window.addEventListener('keyup', e => keys[e.code] = false);
-
-    // Estado del juego
-    let timeStopped = false;
-    let timeStopTimer = 0;
-    let screenShake = 0;
-
-    // Jugador (Jotaro)
-    const player = {
-      x: 150,
-      y: 300,
-      w: 40,
-      h: 70,
-      vx: 0,
-      vy: 0,
-      speed: 6,
-      jumpPower: -13,
-      grounded: false,
-      facing: 1, // 1: derecha, -1: izquierda
-      hp: 100,
-      standActive: false,
-      isAttacking: false,
-      attackType: null, // 'barrage', 'heavy'
-      attackCooldown: 0
-    };
-
-    // Enemigo (Dummy / Dio)
-    const enemy = {
-      x: 600,
-      y: 300,
-      w: 40,
-      h: 70,
-      vx: 0,
-      vy: 0,
-      hp: 100,
-      maxHp: 100,
-      color: '#ffd700',
-      hitTimer: 0
-    };
-
-    // Partículas visuales (efectos de golpes)
-    let particles = [];
-
-    function addHitEffect(x, y, color = '#ff0055') {
-      for (let i = 0; i < 8; i++) {
-        particles.push({
-          x: x,
-          y: y,
-          vx: (Math.random() - 0.5) * 10,
-          vy: (Math.random() - 0.5) * 10,
-          size: Math.random() * 6 + 2,
-          color: color,
-          life: 15
-        });
-      }
-    }
-
-    // Bucle Principal
-    function update() {
-      // Manejo de Zaman Stop (Za Warudo)
-      if (keys['KeyX'] && !timeStopped && player.attackCooldown === 0) {
-        timeStopped = true;
-        timeStopTimer = 180; // 3 segundos (60 fps * 3)
-        screenShake = 15;
-        player.attackCooldown = 300; // Cooldown de Za Warudo
-      }
-
-      if (timeStopped) {
-        timeStopTimer--;
-        if (timeStopTimer <= 0) {
-          timeStopped = false;
-        }
-      }
-
-      if (player.attackCooldown > 0) player.attackCooldown--;
-
-      // Movimiento Jugador
-      if (keys['KeyA'] || keys['ArrowLeft']) {
-        player.vx = -player.speed;
-        player.facing = -1;
-      } else if (keys['KeyD'] || keys['ArrowRight']) {
-        player.vx = player.speed;
-        player.facing = 1;
-      } else {
-        player.vx = 0;
-      }
-
-      // Salto
-      if ((keys['KeyW'] || keys['Space'] || keys['ArrowUp']) && player.grounded) {
-        player.vy = player.jumpPower;
-        player.grounded = false;
-      }
-
-      // Gravedad Jugador
-      player.vy += 0.7;
-      player.x += player.vx;
-      player.y += player.vy;
-
-      // Suelo Jugador
-      if (player.y + player.h >= 370) {
-        player.y = 370 - player.h;
-        player.vy = 0;
-        player.grounded = true;
-      }
-
-      // Lógica de Stand
-      if (keys['ShiftLeft'] || keys['ShiftRight']) {
-        player.standActive = true;
-      }
-
-      // Ataques
-      player.isAttacking = false;
-      if (player.standActive && keys['KeyZ']) { // ORA BARRAGE
-        player.isAttacking = true;
-        player.attackType = 'barrage';
-        
-        // Colisión de Barrage
-        let hitboxX = player.facing === 1 ? player.x + player.w : player.x - 60;
-        if (hitboxX < enemy.x + enemy.w && hitboxX + 60 > enemy.x &&
-            player.y < enemy.y + enemy.h && player.y + player.h > enemy.y) {
-          enemy.hp -= 0.8;
-          enemy.hitTimer = 5;
-          screenShake = 3;
-          addHitEffect(enemy.x + enemy.w/2, enemy.y + enemy.h/2, '#00f2fe');
-        }
-      }
-
-      // IA Enemigo (si el tiempo NO está detenido)
-      if (!timeStopped) {
-        // Gravedad Enemigo
-        enemy.vy += 0.7;
-        enemy.x += enemy.vx;
-        enemy.y += enemy.vy;
-
-        if (enemy.y + enemy.h >= 370) {
-          enemy.y = 370 - enemy.h;
-          enemy.vy = 0;
-        }
-
-        // Recuperar enemigo
-        if (enemy.hp < enemy.maxHp && Math.random() < 0.02) {
-          enemy.hp += 0.2;
-        }
-      }
-
-      // Actualizar Partículas
-      particles.forEach((p, index) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life--;
-        if (p.life <= 0) particles.splice(index, 1);
-      });
-
-      if (screenShake > 0) screenShake--;
-    }
-
-    // Dibujo en pantalla
-    function draw() {
-      ctx.save();
-
-      // Shake de pantalla
-      if (screenShake > 0) {
-        ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake);
-      }
-
-      // Fondo
-      if (timeStopped) {
-        ctx.fillStyle = '#05021a'; // Efecto tiempo congelado
-      } else {
-        ctx.fillStyle = '#1a0f2b';
-      }
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Escenario / Piso
-      ctx.fillStyle = timeStopped ? '#222' : '#3d1e6d';
-      ctx.fillRect(0, 370, canvas.width, 80);
-      ctx.fillStyle = '#ffd700';
-      ctx.fillRect(0, 368, canvas.width, 3);
-
-      // Dibujar Enemigo (DIO)
-      ctx.fillStyle = enemy.hitTimer > 0 ? '#ffffff' : enemy.color;
-      if (enemy.hitTimer > 0) enemy.hitTimer--;
-      ctx.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
-
-      // Barra de vida Enemigo
-      ctx.fillStyle = '#000';
-      ctx.fillRect(enemy.x, enemy.y - 15, enemy.w, 8);
-      ctx.fillStyle = '#ff0055';
-      ctx.fillRect(enemy.x, enemy.y - 15, (enemy.hp / enemy.maxHp) * enemy.w, 8);
-
-      // Dibujar Jugador (Jotaro)
-      ctx.fillStyle = '#111122';
-      ctx.fillRect(player.x, player.y, player.w, player.h);
-
-      // Gorra de Jotaro
-      ctx.fillStyle = '#ffd700';
-      ctx.fillRect(player.facing === 1 ? player.x + 15 : player.x - 5, player.y, 30, 8);
-
-      // Stand (Star Platinum)
-      if (player.standActive) {
-        let standX = player.x - (player.facing * 25);
-        let standY = player.y - 10;
-
-        // Aura del Stand
-        ctx.fillStyle = 'rgba(0, 242, 254, 0.4)';
-        ctx.fillRect(standX - 5, standY - 5, player.w + 10, player.h + 10);
-
-        // Cuerpo del Stand
-        ctx.fillStyle = '#00f2fe';
-        ctx.fillRect(standX, standY, player.w, player.h);
-
-        // Animación BARRAGE (ORA ORA ORA)
-        if (player.isAttacking && player.attackType === 'barrage') {
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-          for (let i = 0; i < 4; i++) {
-            let px = player.facing === 1 ? player.x + player.w + (Math.random() * 40) : player.x - (Math.random() * 40) - 20;
-            let py = player.y + (Math.random() * player.h);
-            ctx.fillRect(px, py, 15, 8);
-          }
-
-          // Texto ORA!
-          ctx.fillStyle = '#ffd700';
-          ctx.font = 'bold 20px Impact';
-          ctx.fillText('ORA!', player.x + (player.facing * 50), player.y - 10);
-        }
-      }
-
-      // Partículas
-      particles.forEach(p => {
-        ctx.fillStyle = p.color;
-        ctx.fillRect(p.x, p.y, p.size, p.size);
-      });
-
-      // Cartel ZA WARUDO
-      if (timeStopped) {
-        ctx.fillStyle = 'rgba(0,0,0,0.5)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = '#00f2fe';
-        ctx.font = 'bold 45px Impact';
-        ctx.textAlign = 'center';
-        ctx.fillText('⏳ ZA WARUDO! TIME STOPPED ⏳', canvas.width / 2, 100);
-        ctx.textAlign = 'start';
-      }
-
-      ctx.restore();
-    }
-
-    // Loop
-    function loop() {
-      update();
-      draw();
-      requestAnimationFrame(loop);
-    }
-
+  <!-- BARRA DE ESTADÍSTICAS E INTERFAZ -->
+  <div id="topBar">
+    <div class="stat money">💰 $<span id="moneyTxt">0</span></div>
+    <div class="stat wave">🌊 OLEAJE: <span id="waveTxt">1</span></div>
+    <button class="btn-ui" onclick="toggleGame()" id="startBtn">▶ INICIAR OLEADA</button>
+    <button class="btn-ui" style="background: linear-gradient(180deg, #a335ee, #55288c); color:#fff;" onclick="openShop()">🎰 TIENDA GACHA ($50)</button>
+    <button class="btn-ui" style="background
     loop();
   </script>
 </body>
