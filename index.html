@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>♟️ Leftchess - copito crak</title>
+  <title>♟️ Leftchess - copito crack</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
@@ -175,8 +176,8 @@
       <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#739552]/20 border border-[#739552] text-4xl mb-1">
         ♞
       </div>
-      <h1 class="text-3xl font-black tracking-tight text-white">AJEDREZ MASTER</h1>
-      <p class="text-sm text-gray-400">Elige tu rival (hasta 1000 ELO) o practica en modo local</p>
+      <h1 class="text-3xl font-black tracking-tight text-white">LEFTCHESS.COM</h1>
+      <p class="text-sm text-gray-400">Copito sera vencido?</p>
     </div>
 
     <!-- Selector de Bots -->
@@ -1350,17 +1351,44 @@
         chosenMove = bestMoves[Math.floor(Math.random() * bestMoves.length)];
       } else {
         // BOSS COPITO (1 ELO aparente / 2400 ELO real):
-        // Apertura agresiva estilo Gambito de Dama / Siciliana + Minimax Alfa-Beta profundidad 3
-        if (moveHistoryList.length === 1 && moveHistoryList[0].w === 'e4') {
+        // Secuencia secreta única para derrotarlo (Gambito Tennison / Trampa al Rey):
+        // 1. Cf3 -> d5 | 2. e4 -> dxe4 | 3. Ce5 -> e6 | 4. Dh5 -> Cf6 | 5. Dxf7#
+        let trapPhrase = null;
+        const m1 = moveHistoryList[0]?.w;
+        const m2 = moveHistoryList[1]?.w;
+        const m3 = moveHistoryList[2]?.w;
+        const m4 = moveHistoryList[3]?.w;
+
+        if (moveHistoryList.length === 1 && m1 === 'Cf3') {
+          const d5 = legalMoves.find(m => m.fromR === 1 && m.fromC === 3 && m.toR === 3 && m.toC === 3);
+          if (d5) {
+            chosenMove = d5;
+            trapPhrase = "Pío... d5. Dominando el centro desde el turno 1.";
+          }
+        } else if (moveHistoryList.length === 2 && m1 === 'Cf3' && m2 === 'e4') {
+          const dxe4 = legalMoves.find(m => m.fromR === 3 && m.fromC === 3 && m.toR === 4 && m.toC === 4);
+          if (dxe4) {
+            chosenMove = dxe4;
+            trapPhrase = "¿Me regalas un peón central? Pío pío, qué delicioso alpiste gratis.";
+          }
+        } else if (moveHistoryList.length === 3 && m1 === 'Cf3' && m2 === 'e4' && m3 === 'Ce5') {
+          const e6 = legalMoves.find(m => m.fromR === 1 && m.fromC === 4 && m.toR === 2 && m.toC === 4);
+          if (e6) {
+            chosenMove = e6;
+            trapPhrase = "Pío... e6. Mi estructura es impenetrable, humano.";
+          }
+        } else if (moveHistoryList.length === 4 && m1 === 'Cf3' && m2 === 'e4' && m3 === 'Ce5' && m4 === 'Dh5') {
+          const nf6 = legalMoves.find(m => m.fromR === 0 && m.fromC === 6 && m.toR === 2 && m.toC === 5);
+          if (nf6) {
+            chosenMove = nf6;
+            trapPhrase = "¡Ja! Pío pío, ataco tu dama con mi caballo... espera... ¿por qué sonríes?";
+          }
+        } else if (moveHistoryList.length === 1 && m1 === 'e4') {
           const sicilian = legalMoves.find(m => m.fromR === 1 && m.fromC === 2 && m.toR === 3 && m.toC === 2);
           if (sicilian) chosenMove = sicilian;
-        } else if (moveHistoryList.length === 1 && moveHistoryList[0].w === 'd4') {
+        } else if (moveHistoryList.length === 1 && m1 === 'd4') {
           const kingsIndian = legalMoves.find(m => m.fromR === 0 && m.fromC === 6 && m.toR === 2 && m.toC === 5);
           if (kingsIndian) chosenMove = kingsIndian;
-        } else if (moveHistoryList.length === 2 && moveHistoryList[0].w === 'd4' && moveHistoryList[1].w === 'c4') {
-          // Gambito Benko / Albin inesperado
-          const gambit = legalMoves.find(m => m.fromR === 1 && m.fromC === 4 && m.toR === 3 && m.toC === 4);
-          if (gambit) chosenMove = gambit;
         }
 
         if (!chosenMove) {
@@ -1385,6 +1413,12 @@
             }
           }
           chosenMove = bestMoves[Math.floor(Math.random() * bestMoves.length)];
+        }
+
+        if (trapPhrase) {
+          document.getElementById('botComment').innerText = `"${trapPhrase}"`;
+          executeMove(chosenMove, 'q');
+          return;
         }
       }
 
