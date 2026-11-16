@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -235,7 +234,6 @@
         </div>
         <span class="text-lg font-bold text-gray-400 group-hover:text-white">→</span>
       </button>
-
       <!-- BOSS FINAL: COPITO (ESTILO MITTENS - 1 ELO APARENTE / 2400 ELO REAL) -->
       <button type="button" onclick="window.startGame('bot', 2400)" class="w-full group flex items-center justify-between p-3.5 bg-gradient-to-r from-[#262a30] via-[#2b1d2e] to-[#262a30] hover:from-purple-700 hover:to-fuchsia-700 border-2 border-purple-500/60 hover:border-fuchsia-300 rounded-xl transition-all text-left shadow-lg shadow-purple-950/40">
         <div class="flex items-center gap-3">
@@ -249,6 +247,21 @@
           </div>
         </div>
         <span class="text-lg font-bold text-fuchsia-300 group-hover:text-white">→</span>
+      </button>
+
+      <!-- BOSS SUPREMO: COPITO EL GRAN MAESTRO (0 ELO APARENTE / 3000 ELO REAL) -->
+      <button type="button" onclick="window.startGame('bot', 3000)" class="w-full group flex items-center justify-between p-3.5 bg-gradient-to-r from-[#262a30] via-[#381d25] to-[#262a30] hover:from-amber-600 hover:to-rose-700 border-2 border-amber-400/75 hover:border-amber-200 rounded-xl transition-all text-left shadow-lg shadow-amber-950/50">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">👑</span>
+          <div>
+            <div class="font-black text-sm sm:text-base text-white flex items-center gap-2">
+              Copito el Gran Maestro <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/30 text-amber-200 border border-amber-400/50 group-hover:bg-black/40 group-hover:text-white">0 ELO</span>
+              <span class="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-rose-500/30 text-rose-200">REY</span>
+            </div>
+            <div class="text-xs text-amber-200/90 group-hover:text-white">"Pío pío... ¿listo para la revancha?"</div>
+          </div>
+        </div>
+        <span class="text-lg font-bold text-amber-300 group-hover:text-white">→</span>
       </button>
     </div>
 
@@ -621,6 +634,26 @@
           "*Aletea suavemente* Magnus Carlsen me pide consejos en secreto.",
           "Pío... Tu rey ya no tiene refugio en este tablero."
         ]
+      },
+      3000: {
+        name: 'Copito el Gran Maestro',
+        avatar: '👑',
+        displayElo: '0 ELO',
+        phrases: [
+          "Pío pío... ¿listo para la revancha? Antes fue fácil porque no estaba jugando en serio, pero ahora SÍ.",
+          "Soy el Rey del ajedrez. Es imposible ganarme sin una estrategia perfecta.",
+          "Pío... *ajusta su corona* ¿Crees que puedes vencer al Rey del tablero? Qué tierno.",
+          "Calculo 3000 de ELO en cada aleteo. No tienes ninguna oportunidad sin un plan maestro.",
+          "Nadie puede destronarme cuando me pongo serio. Tus piezas caerán una por una.",
+          "Pío pío... Cada movimiento tuyo solo confirma mi supremacía absoluta."
+        ],
+        winningPhrases: [
+          "¡JAJAJA! Pío pío... ¡Soy el Rey invencible del ajedrez, mira esa ventaja aplastante!",
+          "¿Sientes el peso de mi corona? Es imposible derrotarme cuando juego en serio.",
+          "Pío... Tu ejército desaparece del tablero. ¡Arrodíllate ante el Rey!",
+          "¡3000 ELO de pura perfección! Nadie puede tocar mi trono."
+        ],
+        defeatPhrase: "¡¿QUÉ?! Pío... ¡Felicitaciones, has destronado al Rey jajaja, qué maldito experto eres!"
       }
     };
 
@@ -1349,7 +1382,7 @@
           }
         }
         chosenMove = bestMoves[Math.floor(Math.random() * bestMoves.length)];
-      } else {
+      } else if (currentBotElo === 2400) {
         // BOSS COPITO (1 ELO aparente / 2400 ELO real):
         // Secuencia secreta única para derrotarlo (Gambito Tennison / Trampa al Rey):
         // 1. Cf3 -> d5 | 2. e4 -> dxe4 | 3. Ce5 -> e6 | 4. Dh5 -> Cf6 | 5. Dxf7#
@@ -1420,10 +1453,53 @@
           executeMove(chosenMove, 'q');
           return;
         }
+      } else {
+        // BOSS SUPREMO: COPITO EL GRAN MAESTRO (0 ELO aparente / 3000 ELO real)
+        // Rechaza trampas baratas y calcula a máxima profundidad (3 plies Alfa-Beta)
+        if (moveHistoryList.length === 1) {
+          const m1 = moveHistoryList[0]?.w;
+          if (m1 === 'e4') {
+            const sicilian = legalMoves.find(m => m.fromR === 1 && m.fromC === 2 && m.toR === 3 && m.toC === 2);
+            if (sicilian) chosenMove = sicilian;
+          } else if (m1 === 'd4') {
+            const kingsIndian = legalMoves.find(m => m.fromR === 0 && m.fromC === 6 && m.toR === 2 && m.toC === 5);
+            if (kingsIndian) chosenMove = kingsIndian;
+          } else if (m1 === 'Cf3') {
+            const nf6 = legalMoves.find(m => m.fromR === 0 && m.fromC === 6 && m.toR === 2 && m.toC === 5);
+            if (nf6) chosenMove = nf6;
+          }
+        }
+
+        if (!chosenMove) {
+          let bestScore = Infinity;
+          let bestMoves = [];
+
+          legalMoves.sort((a, z) => {
+            const capA = board[a.toR][a.toC] ? PIECE_VALUES[board[a.toR][a.toC].type] : 0;
+            const capZ = board[z.toR][z.toC] ? PIECE_VALUES[board[z.toR][z.toC].type] : 0;
+            return capZ - capA;
+          });
+
+          for (const m of legalMoves) {
+            const simBoard = applyMoveToBoard(board, m);
+            const score = minimaxCopito(simBoard, 3, -Infinity, Infinity, true);
+            if (score < bestScore) {
+              bestScore = score;
+              bestMoves = [m];
+            } else if (score === bestScore) {
+              bestMoves.push(m);
+            }
+          }
+          chosenMove = bestMoves[Math.floor(Math.random() * bestMoves.length)];
+        }
       }
 
       const cfg = BOTS_CONFIG[currentBotElo] || BOTS_CONFIG[200];
-      const phrase = cfg.phrases[Math.floor(Math.random() * cfg.phrases.length)];
+      let phraseList = cfg.phrases;
+      if (currentBotElo === 3000 && cfg.winningPhrases && evaluateBoard(board, false) <= -200) {
+        phraseList = cfg.winningPhrases;
+      }
+      const phrase = phraseList[Math.floor(Math.random() * phraseList.length)];
       document.getElementById('botComment').innerText = `"${phrase}"`;
 
       executeMove(chosenMove, 'q');
@@ -1694,6 +1770,10 @@
         reason.innerText = `Victoria para ${winnerName}.`;
         if (winnerColor === 'w' && gameMode === 'bot') {
           estimatedPlayerElo = Math.max(estimatedPlayerElo, currentBotElo + 120);
+          if (currentBotElo === 3000 && cfg && cfg.defeatPhrase) {
+            document.getElementById('botComment').innerText = `"${cfg.defeatPhrase}"`;
+            reason.innerText = cfg.defeatPhrase;
+          }
         }
       } else {
         icon.innerText = '🤝';
