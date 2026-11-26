@@ -360,6 +360,49 @@
               </div>
               <span class="text-lg font-bold text-gray-400 group-hover:text-white">→</span>
             </button>
+
+            <!-- EMPAREJAMIENTO RANDOM "ONLINE" (BOTS CON PERFILES) -->
+            <button type="button" onclick="window.openRandomMatchmaking()" class="w-full group flex items-center justify-between p-3 bg-gradient-to-r from-cyan-950/60 via-[#222834] to-emerald-950/60 hover:from-cyan-700 hover:to-emerald-700 border border-cyan-500/50 hover:border-cyan-200 rounded-xl transition-all text-left shadow-lg">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl">🌐</span>
+                <div>
+                  <div class="font-black text-sm text-white flex items-center gap-2">
+                    Partida Rápida Random <span class="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-cyan-500/25 text-cyan-200 border border-cyan-400/40">ONLINE SIM</span>
+                  </div>
+                  <div class="text-xs text-cyan-100/80 group-hover:text-white">Busca un rival aleatorio de cualquier nivel y país</div>
+                </div>
+              </div>
+              <span class="text-lg font-bold text-cyan-300 group-hover:text-white">⚡</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de Búsqueda de Rival Random -->
+      <div id="matchmakingModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-[#1c1f24] border border-cyan-500/50 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl">
+          <div id="mmSpinner" class="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/15 border border-cyan-400/40 flex items-center justify-center text-3xl animate-bounce">
+            🌐
+          </div>
+          <div id="mmTitle" class="text-lg font-black text-white">Buscando rival en línea...</div>
+          <p id="mmStatus" class="text-xs text-gray-400">Escaneando salas rápidas y ajustando emparejamiento...</p>
+          <div id="mmRivalCard" class="hidden bg-[#14161a] border border-gray-800 rounded-xl p-3 flex items-center gap-3 text-left">
+            <div id="mmRivalAvatar" class="w-11 h-11 rounded-xl bg-[#252930] flex items-center justify-center text-2xl">🎯</div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-1.5">
+                <span id="mmRivalName" class="font-bold text-sm text-white truncate">Rival</span>
+                <span id="mmRivalFlag" class="text-sm">🇧🇷</span>
+              </div>
+              <div id="mmRivalMeta" class="text-xs font-bold text-cyan-400">1200 ELO • Estilo Táctico</div>
+            </div>
+          </div>
+          <div class="flex gap-2 pt-1">
+            <button type="button" id="mmCancelBtn" onclick="window.closeMatchmaking()" class="flex-1 py-2.5 px-4 bg-gray-700 hover:bg-gray-600 text-white text-xs font-bold rounded-xl transition">
+              Cancelar
+            </button>
+            <button type="button" id="mmPlayBtn" onclick="window.acceptRandomMatch()" class="hidden flex-1 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition">
+              ¡A jugar! ⚔️
+            </button>
           </div>
         </div>
       </div>
@@ -610,7 +653,11 @@
       ocean:    { name: 'Azul Torneo',     light: '#dee3e6', dark: '#5d8aa8' },
       obsidian: { name: 'Obsidiana Neón',  light: '#3b4252', dark: '#1e222a' },
       marble:   { name: 'Mármol Real',     light: '#f3f4f6', dark: '#6b7280' },
-      cherry:   { name: 'Cerezo Imperial', light: '#fce7f3', dark: '#9d174d' }
+      cherry:   { name: 'Cerezo Imperial', light: '#fce7f3', dark: '#9d174d' },
+      ice:      { name: 'Mar Hielo',       light: '#e0f2fe', dark: '#0284c7' },
+      mahogany: { name: 'Madera Caoba',    light: '#edd6b8', dark: '#7c2d12' },
+      club:     { name: 'Tapete de Club',  light: '#e6edd8', dark: '#2f6f4e' },
+      sunset:   { name: 'Atardecer Cálido',light: '#fef3c7', dark: '#c2410c' }
     };
 
     const PIECE_THEMES = {
@@ -637,6 +684,24 @@
         desc: 'Marfil suave vs jade profundo',
         wFill: '#ecfdf5', wStroke: '#065f46', wDetail: '#059669',
         bFill: '#064e3b', bStroke: '#34d399', bDetail: '#6ee7b7'
+      },
+      wood: {
+        name: 'Madera Staunton',
+        desc: 'Arce claro y nogal oscuro',
+        wFill: '#f5deb3', wStroke: '#5c3a21', wDetail: '#7c4a27',
+        bFill: '#5c3a21', bStroke: '#2b180c', bDetail: '#d6a87c'
+      },
+      glacier: {
+        name: 'Cristal Glaciar',
+        desc: 'Escarcha azul vs zafiro profundo',
+        wFill: '#f0f9ff', wStroke: '#0369a1', wDetail: '#0284c7',
+        bFill: '#0c4a6e', bStroke: '#38bdf8', bDetail: '#bae6fd'
+      },
+      ruby: {
+        name: 'Rubí Imperial',
+        desc: 'Perla marfil vs carmesí real',
+        wFill: '#fff7ed', wStroke: '#7c2d12', wDetail: '#9a3412',
+        bFill: '#881337', bStroke: '#fda4af', bDetail: '#fecdd3'
       }
     };
 
@@ -651,7 +716,11 @@
       bio: 'Listo para derrotar a Copito en el tablero.'
     };
 
-    const AVATAR_OPTIONS = ['😎', '♞', '👑', '🔥', '🧠', '🦅', '🐉', '🤖', '🦊', '⚡'];
+    const AVATAR_OPTIONS = [
+      '😎', '♞', '👑', '🔥', '🧠', '🦅', '🐉', '🤖', '🦊', '⚡',
+      '🐺', '🦁', '🦉', '🦄', '🐼', '🐯', '⚔️', '🛡️', '🎯', '💎',
+      '🚀', '🌙', '☀️', '🍀', '🎭', '👾', '🎩', '🏆', '🌪️', '❄️'
+    ];
 
     function getPieceSVG(color, type, themeKey = selectedPieceTheme) {
       const th = PIECE_THEMES[themeKey] || PIECE_THEMES.classic;
@@ -861,68 +930,107 @@
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
+    // Sonidos orgánicos tipo ficha de madera/fieltro en ajedrez (menos sintéticos)
+    function playWoodTap(pitch = 165, duration = 0.065, volume = 0.28) {
+      if (!audioCtx) audioCtx = new AudioContextClass();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const now = audioCtx.currentTime;
+
+      // Golpe grave corto de madera
+      const bodyOsc = audioCtx.createOscillator();
+      const bodyGain = audioCtx.createGain();
+      bodyOsc.type = 'sine';
+      bodyOsc.frequency.setValueAtTime(pitch, now);
+      bodyOsc.frequency.exponentialRampToValueAtTime(pitch * 0.45, now + duration);
+      bodyGain.gain.setValueAtTime(volume, now);
+      bodyGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+      bodyOsc.connect(bodyGain);
+      bodyGain.connect(audioCtx.destination);
+      bodyOsc.start(now);
+      bodyOsc.stop(now + duration);
+
+      // Pequeño click seco filtrado (como golpe sobre tablero de madera)
+      const bufSize = Math.floor(audioCtx.sampleRate * 0.025);
+      const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufSize * 0.35));
+      }
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = buf;
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(pitch * 5.5, now);
+      filter.Q.setValueAtTime(2.2, now);
+
+      const nGain = audioCtx.createGain();
+      nGain.gain.setValueAtTime(volume * 0.55, now);
+      nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+
+      noise.connect(filter);
+      filter.connect(nGain);
+      nGain.connect(audioCtx.destination);
+      noise.start(now);
+    }
+
     function playSound(type) {
       if (!soundEnabled) return;
       try {
         if (!audioCtx) audioCtx = new AudioContextClass();
         if (audioCtx.state === 'suspended') audioCtx.resume();
-
         const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
 
         if (type === 'move') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(185, now);
-          osc.frequency.exponentialRampToValueAtTime(95, now + 0.08);
-          gain.gain.setValueAtTime(0.25, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-          osc.start(now);
-          osc.stop(now + 0.08);
+          playWoodTap(165, 0.06, 0.28);
         } else if (type === 'capture') {
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(250, now);
-          osc.frequency.exponentialRampToValueAtTime(65, now + 0.14);
-          gain.gain.setValueAtTime(0.35, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.14);
-          osc.start(now);
-          osc.stop(now + 0.14);
+          playWoodTap(130, 0.085, 0.36);
+          setTimeout(() => playWoodTap(210, 0.045, 0.16), 30);
         } else if (type === 'brilliant') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(587.33, now);       // D5
-          osc.frequency.setValueAtTime(880, now + 0.09);     // A5
-          osc.frequency.setValueAtTime(1174.66, now + 0.18); // D6
-          gain.gain.setValueAtTime(0.3, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
-          osc.start(now);
-          osc.stop(now + 0.45);
+          playWoodTap(190, 0.06, 0.22);
+          [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.075);
+            gain.gain.setValueAtTime(0.14, now + idx * 0.075);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.075 + 0.32);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.075);
+            osc.stop(now + idx * 0.075 + 0.34);
+          });
         } else if (type === 'check') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(520, now);
-          osc.frequency.setValueAtTime(680, now + 0.09);
-          gain.gain.setValueAtTime(0.3, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
-          osc.start(now);
-          osc.stop(now + 0.22);
+          playWoodTap(220, 0.06, 0.25);
+          [440, 554.37].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+            gain.gain.setValueAtTime(0.14, now + idx * 0.07);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.18);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.07);
+            osc.stop(now + idx * 0.07 + 0.2);
+          });
         } else if (type === 'castle') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(200, now);
-          osc.frequency.setValueAtTime(260, now + 0.08);
-          gain.gain.setValueAtTime(0.25, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
-          osc.start(now);
-          osc.stop(now + 0.18);
+          playWoodTap(160, 0.06, 0.25);
+          setTimeout(() => playWoodTap(185, 0.065, 0.25), 95);
         } else if (type === 'gameover') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(330, now);
-          osc.frequency.setValueAtTime(440, now + 0.15);
-          osc.frequency.setValueAtTime(554, now + 0.3);
-          gain.gain.setValueAtTime(0.3, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.55);
-          osc.start(now);
-          osc.stop(now + 0.55);
+          playWoodTap(150, 0.08, 0.25);
+          [392.0, 493.88, 587.33].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.13);
+            gain.gain.setValueAtTime(0.15, now + idx * 0.13);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.13 + 0.4);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.13);
+            osc.stop(now + idx * 0.13 + 0.42);
+          });
         }
       } catch (e) {
         // Ignorar si el navegador bloquea el audio antes de interacción
@@ -957,6 +1065,65 @@
 
     // Medidor de ELO del jugador en vivo
     let estimatedPlayerElo = 600;
+    let customBotProfile = null;
+    let matchmakingTimer = null;
+    let pendingRandomRival = null;
+
+    const RANDOM_ONLINE_POOL = [
+      { name: 'Mateo_Cali', avatar: '🐺', flag: '🇨🇴', elo: 450, style: 'Casual', phrase: '¡Buenas! A ver cómo sale esta partida.' },
+      { name: 'SofiChess', avatar: '🦊', flag: '🇲🇽', elo: 650, style: 'Ofensiva', phrase: 'Me gusta atacar rápido por el flanco.' },
+      { name: 'ToroBlanco', avatar: '🦁', flag: '🇦🇷', elo: 850, style: 'Táctico', phrase: 'Cuidado con los caballos, bro.' },
+      { name: 'Valen_GM', avatar: '🦉', flag: '🇪🇸', elo: 1000, style: 'Posicional', phrase: 'Controlando el centro y sumando ventaja.' },
+      { name: 'AndresBlitz', avatar: '⚡', flag: '🇨🇱', elo: 750, style: 'Rápido', phrase: '¡A mover fichas sin miedo!' },
+      { name: 'LuciaQueen', avatar: '👑', flag: '🇵🇪', elo: 950, style: 'Calculador', phrase: 'Cada jugada cuenta aquí.' }
+    ];
+
+    window.openRandomMatchmaking = function () {
+      const modal = document.getElementById('matchmakingModal');
+      document.getElementById('mmSpinner').classList.remove('hidden');
+      document.getElementById('mmTitle').innerText = 'Buscando rival en línea...';
+      document.getElementById('mmStatus').innerText = 'Conectando con jugadores disponibles...';
+      document.getElementById('mmRivalCard').classList.add('hidden');
+      document.getElementById('mmPlayBtn').classList.add('hidden');
+      document.getElementById('mmCancelBtn').innerText = 'Cancelar';
+      modal.classList.remove('hidden');
+
+      if (matchmakingTimer) clearTimeout(matchmakingTimer);
+      matchmakingTimer = setTimeout(() => {
+        const rival = RANDOM_ONLINE_POOL[Math.floor(Math.random() * RANDOM_ONLINE_POOL.length)];
+        pendingRandomRival = rival;
+
+        document.getElementById('mmSpinner').classList.add('hidden');
+        document.getElementById('mmTitle').innerText = '¡Rival encontrado!';
+        document.getElementById('mmStatus').innerText = 'Sala lista para iniciar:';
+        document.getElementById('mmRivalAvatar').innerText = rival.avatar;
+        document.getElementById('mmRivalName').innerText = rival.name;
+        document.getElementById('mmRivalFlag').innerText = rival.flag;
+        document.getElementById('mmRivalMeta').innerText = `${rival.elo} ELO • Estilo ${rival.style}`;
+        document.getElementById('mmRivalCard').classList.remove('hidden');
+        document.getElementById('mmPlayBtn').classList.remove('hidden');
+        document.getElementById('mmCancelBtn').innerText = 'Buscar otro';
+      }, 1100);
+    };
+
+    window.closeMatchmaking = function () {
+      if (matchmakingTimer) clearTimeout(matchmakingTimer);
+      pendingRandomRival = null;
+      document.getElementById('matchmakingModal').classList.add('hidden');
+    };
+
+    window.acceptRandomMatch = function () {
+      if (!pendingRandomRival) return;
+      const rival = pendingRandomRival;
+      customBotProfile = {
+        name: `${rival.name} ${rival.flag}`,
+        avatar: rival.avatar,
+        displayElo: `${rival.elo} ELO`,
+        phrases: [rival.phrase, 'Buena movida, déjame pensar...', '¡Interesante línea en el tablero!']
+      };
+      document.getElementById('matchmakingModal').classList.add('hidden');
+      window.startGame('bot', rival.elo);
+    };
 
     // Estado de Drag & Drop y Flechas Tácticas
     let draggedFrom = null;
@@ -1119,7 +1286,7 @@
       document.getElementById('gameScreen').classList.add('flex');
 
       if (mode === 'bot') {
-        const cfg = BOTS_CONFIG[elo] || BOTS_CONFIG[200];
+        const cfg = customBotProfile || BOTS_CONFIG[elo] || BOTS_CONFIG[200];
         document.getElementById('blackAvatar').innerText = cfg.avatar;
         document.getElementById('blackName').innerText = cfg.name;
         document.getElementById('blackEloBadge').innerText = cfg.displayElo || `${elo} ELO`;
@@ -1131,6 +1298,7 @@
         document.getElementById('botChatTitle').innerText = `${cfg.avatar} ${cfg.name} (${cfg.displayElo || elo + ' ELO'}):`;
         document.getElementById('botComment').innerText = `"${cfg.phrases[0]}"`;
       } else {
+        customBotProfile = null;
         document.getElementById('blackAvatar').innerText = '♚';
         document.getElementById('blackName').innerText = 'Jugador 2 (Negras)';
         document.getElementById('blackEloBadge').classList.add('hidden');
@@ -1147,6 +1315,7 @@
     };
 
     window.backToMenu = function () {
+      customBotProfile = null;
       if (botTimeout) clearTimeout(botTimeout);
       document.getElementById('gameScreen').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('flex');
@@ -1885,7 +2054,7 @@
         }
       }
 
-      const cfg = BOTS_CONFIG[currentBotElo] || BOTS_CONFIG[200];
+      const cfg = customBotProfile || BOTS_CONFIG[currentBotElo] || BOTS_CONFIG[200];
       let phraseList = cfg.phrases;
       if (currentBotElo === 3000 && cfg.winningPhrases && evaluateBoard(board, false) <= -200) {
         phraseList = cfg.winningPhrases;
