@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>♟️ Leftchess - copito crack</title>
+  <title>♟️ Leftchess.com v2 - 50 Bots, Nube y Torneos</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -14,11 +14,10 @@
       user-select: none;
     }
 
-    /* Contenedor y Tablero de Ajedrez */
     .board-wrapper {
       position: relative;
       width: 100%;
-      max-width: 560px;
+      max-width: 540px;
       aspect-ratio: 1 / 1;
     }
 
@@ -42,11 +41,8 @@
       transition: background-color 0.12s ease;
     }
 
-    /* Colores Clásicos Estilo Chess.com */
     .sq-light { background-color: var(--sq-light, #ebecd0); }
     .sq-dark { background-color: var(--sq-dark, #739552); }
-
-    /* Estados de Casillas */
     .sq-selected { background-color: #f5f682 !important; }
     .sq-last-move { background-color: rgba(245, 246, 130, 0.55) !important; }
     .sq-drag-over { box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.75); }
@@ -54,11 +50,10 @@
       background: radial-gradient(circle, rgba(255,0,0,0.85) 0%, rgba(220,38,38,0.6) 60%, transparent 100%) !important;
     }
 
-    /* Indicadores de Movimiento Legal */
     .move-dot {
       width: 28%;
       height: 28%;
-      background-color: rgba(0, 0, 0, 0.22);
+      background-color: rgba(0, 0, 0, 0.24);
       border-radius: 50%;
       pointer-events: none;
       z-index: 2;
@@ -68,13 +63,12 @@
       position: absolute;
       width: 84%;
       height: 84%;
-      border: 5px solid rgba(0, 0, 0, 0.22);
+      border: 5px solid rgba(0, 0, 0, 0.25);
       border-radius: 50%;
       pointer-events: none;
       z-index: 2;
     }
 
-    /* Piezas Arrastrables */
     .piece-wrapper {
       width: 84%;
       height: 84%;
@@ -86,9 +80,7 @@
       transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1);
     }
 
-    .piece-wrapper:active {
-      cursor: grabbing;
-    }
+    .piece-wrapper:active { cursor: grabbing; }
 
     .piece-svg {
       width: 100%;
@@ -97,11 +89,8 @@
       pointer-events: none;
     }
 
-    .square:hover .piece-wrapper {
-      transform: scale(1.06);
-    }
+    .square:hover .piece-wrapper { transform: scale(1.06); }
 
-    /* Capa SVG de Flechas Tácticas */
     #arrowOverlay {
       position: absolute;
       inset: 0;
@@ -111,7 +100,6 @@
       z-index: 15;
     }
 
-    /* Insignia de Jugada Brillante (!!) en la casilla */
     .brilliant-badge {
       position: absolute;
       top: -4px;
@@ -139,7 +127,15 @@
       100% { transform: scale(1); }
     }
 
-    /* Coordenadas del tablero */
+    @keyframes championPulse {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.12) rotate(4deg); }
+    }
+
+    .champion-crown-anim {
+      animation: championPulse 1.4s ease-in-out infinite;
+    }
+
     .coord-rank {
       position: absolute;
       top: 2px;
@@ -159,7 +155,6 @@
     .sq-light .coord-rank, .sq-light .coord-file { color: var(--sq-dark, #739552); }
     .sq-dark .coord-rank, .sq-dark .coord-file { color: var(--sq-light, #ebecd0); }
 
-    /* Scrollbar personalizado */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #1e2025; border-radius: 4px; }
     ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
@@ -168,45 +163,46 @@
 <body class="min-h-screen flex flex-col items-center justify-center p-3 sm:p-6">
 
   <!-- =====================================================================
-       HUB PRINCIPAL ESTILO CHESS.COM (LOBBY + PERFIL + PERSONALIZAR)
+       HUB PRINCIPAL (LOBBY + 50 BOTS ONLINE + TORNEOS SUB1/2/3 + PERFIL)
        ===================================================================== -->
-  <div id="mainMenu" class="w-full max-w-6xl bg-[#1c1f24] border border-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[640px]">
-    
-    <!-- Barra Lateral Estilo Chess.com -->
+  <div id="mainMenu" class="w-full max-w-6xl bg-[#1c1f24] border border-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[680px]">
+
+    <!-- Barra Lateral -->
     <aside class="w-full md:w-64 bg-[#16181c] border-b md:border-b-0 md:border-r border-gray-800 p-4 flex flex-col justify-between gap-4">
-      <div class="space-y-5">
-        <!-- Logo -->
+      <div class="space-y-4">
         <div class="flex items-center gap-3 px-2 pt-1">
-          <div class="w-11 h-11 rounded-xl bg-[#739552] flex items-center justify-center text-2xl text-white shadow-lg shadow-[#739552]/30">
+          <div class="w-11 h-11 rounded-xl bg-[#739552] flex items-center justify-center text-2xl text-white shadow-lg">
             ♞
           </div>
           <div>
             <h1 class="text-lg font-black tracking-tight text-white leading-none">LEFTCHESS<span class="text-[#81b64c]">.COM</span></h1>
-            <p class="text-[11px] text-gray-400 mt-0.5">Copito será vencido?</p>
+            <p class="text-[11px] text-gray-400 mt-0.5">50 Bots • Nube • Torneos</p>
           </div>
         </div>
 
-        <!-- Tarjeta Mini de Perfil Activo -->
+        <!-- Perfil Rápido con Títulos de Campeón -->
         <div onclick="window.switchMenuTab('profile')" class="cursor-pointer bg-[#21252b] hover:bg-[#282d35] border border-gray-700/80 rounded-xl p-3 transition">
           <div class="flex items-center gap-2.5">
-            <div id="sidebarAvatar" class="w-10 h-10 rounded-lg bg-[#739552]/25 border border-[#81b64c]/50 flex items-center justify-center text-xl">
-              😎
-            </div>
+            <div id="sidebarAvatar" class="w-10 h-10 rounded-lg bg-[#739552]/25 border border-[#81b64c]/50 flex items-center justify-center text-xl">😎</div>
             <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-1.5">
+              <div class="flex items-center gap-1 flex-wrap">
                 <span id="sidebarUsername" class="font-bold text-sm text-white truncate">Invitado</span>
                 <span id="sidebarFlag" class="text-sm">🇨🇴</span>
               </div>
               <div class="text-[11px] text-[#81b64c] font-bold" id="sidebarElo">ELO: 600 • Editar perfil</div>
             </div>
           </div>
+          <div id="sidebarTitles" class="flex flex-col gap-1 mt-2"></div>
           <p id="sidebarBio" class="text-[11px] text-gray-400 mt-2 line-clamp-2 italic">"Listo para derrotar a Copito en el tablero."</p>
         </div>
 
         <!-- Navegación -->
-        <nav class="grid grid-cols-3 md:grid-cols-1 gap-1.5">
+        <nav class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-1 gap-1.5">
           <button type="button" id="navBtnPlay" onclick="window.switchMenuTab('play')" class="flex items-center justify-center md:justify-start gap-2.5 px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-[#739552] text-white transition">
             <span>⚔️</span> <span>Jugar</span>
+          </button>
+          <button type="button" id="navBtnPool" onclick="window.switchMenuTab('pool')" class="flex items-center justify-center md:justify-start gap-2.5 px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-transparent hover:bg-[#252930] text-gray-300 transition">
+            <span>🤖</span> <span>50 Bots Online</span>
           </button>
           <button type="button" id="navBtnProfile" onclick="window.switchMenuTab('profile')" class="flex items-center justify-center md:justify-start gap-2.5 px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-transparent hover:bg-[#252930] text-gray-300 transition">
             <span>👤</span> <span>Mi Cuenta</span>
@@ -215,28 +211,36 @@
             <span>🎨</span> <span>Tablero y Fichas</span>
           </button>
         </nav>
+
+        <!-- Selector de Entrenador Inteligente (visible en entrenamiento/bots, oculto en partidas online) -->
+        <div class="bg-[#1b1e24] border border-indigo-500/30 rounded-xl p-3 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-black uppercase tracking-wider text-indigo-300">🎓 Entrenador IA</span>
+            <span class="text-[10px] text-gray-400">Solo Bots/Local</span>
+          </div>
+          <select id="coachSelect" onchange="window.setSelectedCoach(this.value)" class="w-full px-2.5 py-1.5 bg-[#252932] border border-gray-700 rounded-lg text-xs text-white outline-none">
+            <option value="none">Sin entrenador</option>
+            <option value="stockfish_mentor" selected>🧠 Coach Valen (GM Táctico • 2850)</option>
+            <option value="gambit_sensei">⚡ Sensei Kronos (Ataque & Gambitos • 2920)</option>
+            <option value="endgame_sage">🦉 Sabia Minerva (Finales & Posición • 2980)</option>
+          </select>
+        </div>
       </div>
 
-      <!-- Pie Lateral -->
-      <div class="pt-3 border-t border-gray-800 flex md:flex-col gap-2 justify-between text-xs text-gray-400">
+      <!-- Estado de Nube y Sonido -->
+      <div class="pt-3 border-t border-gray-800 space-y-2 text-xs text-gray-400">
+        <div id="cloudSyncStatus" class="text-[11px] text-emerald-400 font-bold px-1">☁️ Nube activa: sincronizado</div>
         <button type="button" onclick="window.toggleSound()" id="menuSoundBtn" class="w-full py-2 px-3 rounded-lg bg-[#21252b] hover:bg-[#2a2f37] text-gray-200 font-semibold text-left">
           🔊 Sonido: ON
         </button>
-        <div class="hidden md:block text-[11px] text-gray-500 px-1">
-          🖱️ Arrastra fichas • Clic der = Flechas
-        </div>
       </div>
     </aside>
 
-    <!-- Área Central Dinámica -->
+    <!-- Área Central -->
     <main class="flex-1 p-5 sm:p-7 overflow-y-auto">
 
-      <!-- =================================================================
-           PESTAÑA 1: JUGAR (ESTILO CHESS.COM CON PREVIEW + BOTS)
-           ================================================================= -->
+      <!-- PESTAÑA 1: JUGAR -->
       <div id="tabPlay" class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
-        
-        <!-- Columna Izquierda: Vista Previa del Tablero Personalizado -->
         <div class="xl:col-span-5 flex flex-col items-center bg-[#16181c] border border-gray-800 rounded-2xl p-4 space-y-3">
           <div class="w-full flex items-center justify-between text-xs">
             <span class="font-bold text-gray-300">Vista previa de tu tablero</span>
@@ -244,399 +248,461 @@
               Cambiar estilo →
             </button>
           </div>
-          <div id="miniPreviewBoard" class="w-full max-w-[270px] aspect-square grid grid-cols-8 grid-rows-8 rounded-xl overflow-hidden border-2 border-gray-700 shadow-xl"></div>
+          <div id="miniPreviewBoard" class="w-full max-w-[260px] aspect-square grid grid-cols-8 grid-rows-8 rounded-xl overflow-hidden border-2 border-gray-700 shadow-xl"></div>
           <div class="w-full grid grid-cols-2 gap-2 pt-1 text-center">
             <div class="bg-[#1f2329] p-2 rounded-lg border border-gray-800">
               <div class="text-[10px] text-gray-400 uppercase">Tablero</div>
-              <div id="previewBoardThemeName" class="text-xs font-bold text-white">Verde Clásico</div>
+              <div id="previewBoardThemeName" class="text-xs font-bold text-white">Verde Chess.com</div>
             </div>
             <div class="bg-[#1f2329] p-2 rounded-lg border border-gray-800">
               <div class="text-[10px] text-gray-400 uppercase">Fichas</div>
-              <div id="previewPieceThemeName" class="text-xs font-bold text-white">Torneo Pro</div>
+              <div id="previewPieceThemeName" class="text-xs font-bold text-white">Torneo Clásico</div>
             </div>
           </div>
         </div>
 
-        <!-- Columna Derecha: Selección de Rivales y Modos -->
-        <div class="xl:col-span-7 space-y-3">
-          <div class="flex items-center justify-between">
-            <h2 class="text-xl font-black text-white">Jugar Ajedrez Online / Bots</h2>
-            <span class="text-xs px-2.5 py-1 rounded-full bg-[#739552]/20 text-[#95cc5e] font-bold border border-[#739552]/40">
-              6 Rivales Disponibles
+        <div class="xl:col-span-7 space-y-2.5">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <h2 class="text-xl font-black text-white">Seleccionar Modo de Juego</h2>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-500/15 text-cyan-300 font-bold border border-cyan-500/30">
+              50 Bots Online • Hasta 3.000 ELO
             </span>
           </div>
 
-          <div class="space-y-2 text-left">
-            <button type="button" onclick="window.startGame('bot', 200)" class="w-full group flex items-center justify-between p-3 bg-[#262a30] hover:bg-[#739552] border border-gray-700 hover:border-[#8bb364] rounded-xl transition-all text-left">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl">🤪</span>
-                <div>
-                  <div class="font-bold text-sm text-white flex items-center gap-2">
-                    Bot "El Despistado" <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 group-hover:bg-black/30 group-hover:text-white">200 ELO</span>
-                  </div>
-                  <div class="text-xs text-gray-400 group-hover:text-gray-100">Regala piezas y mueve casi al azar</div>
-                </div>
+          <button type="button" onclick="window.startGame('bot', 200)" class="w-full group flex items-center justify-between p-3 bg-[#262a30] hover:bg-[#739552] border border-gray-700 rounded-xl transition text-left">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🤪</span>
+              <div>
+                <div class="font-bold text-sm text-white">Bot "El Despistado" <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">200 ELO</span></div>
+                <div class="text-xs text-gray-400 group-hover:text-gray-100">Con consejos de tu entrenador a la izquierda</div>
               </div>
-              <span class="text-lg font-bold text-gray-400 group-hover:text-white">→</span>
-            </button>
-
-            <button type="button" onclick="window.startGame('bot', 500)" class="w-full group flex items-center justify-between p-3 bg-[#262a30] hover:bg-[#739552] border border-gray-700 hover:border-[#8bb364] rounded-xl transition-all text-left">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl">🤓</span>
-                <div>
-                  <div class="font-bold text-sm text-white flex items-center gap-2">
-                    Bot "El Principiante" <span class="text-[11px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 group-hover:bg-black/30 group-hover:text-white">500 ELO</span>
-                  </div>
-                  <div class="text-xs text-gray-400 group-hover:text-gray-100">Captura piezas gratis pero cae en trucos básicos</div>
-                </div>
-              </div>
-              <span class="text-lg font-bold text-gray-400 group-hover:text-white">→</span>
-            </button>
-
-            <button type="button" onclick="window.startGame('bot', 800)" class="w-full group flex items-center justify-between p-3 bg-[#262a30] hover:bg-[#739552] border border-gray-700 hover:border-[#8bb364] rounded-xl transition-all text-left">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl">🧐</span>
-                <div>
-                  <div class="font-bold text-sm text-white flex items-center gap-2">
-                    Bot "El Táctico" <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 group-hover:bg-black/30 group-hover:text-white">800 ELO</span>
-                  </div>
-                  <div class="text-xs text-gray-400 group-hover:text-gray-100">Defiende sus piezas y busca ataques dobles</div>
-                </div>
-              </div>
-              <span class="text-lg font-bold text-gray-400 group-hover:text-white">→</span>
-            </button>
-
-            <button type="button" onclick="window.startGame('bot', 1000)" class="w-full group flex items-center justify-between p-3 bg-[#262a30] hover:bg-rose-600 border border-gray-700 hover:border-rose-400 rounded-xl transition-all text-left">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl">🔥</span>
-                <div>
-                  <div class="font-bold text-sm text-white flex items-center gap-2">
-                    Bot "El Maestro" <span class="text-[11px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 group-hover:bg-black/30 group-hover:text-white">1000 ELO</span>
-                  </div>
-                  <div class="text-xs text-gray-400 group-hover:text-gray-100">Calcula respuestas y castiga errores graves</div>
-                </div>
-              </div>
-              <span class="text-lg font-bold text-gray-400 group-hover:text-white">→</span>
-            </button>
-
-            <!-- BOSS FINAL: COPITO (1 ELO APARENTE / 2400 ELO REAL) -->
-            <button type="button" onclick="window.startGame('bot', 2400)" class="w-full group flex items-center justify-between p-3 bg-gradient-to-r from-[#262a30] via-[#2b1d2e] to-[#262a30] hover:from-purple-700 hover:to-fuchsia-700 border-2 border-purple-500/60 hover:border-fuchsia-300 rounded-xl transition-all text-left shadow-lg shadow-purple-950/40">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl">🕊️</span>
-                <div>
-                  <div class="font-black text-sm text-white flex items-center gap-2">
-                    Copito <span class="text-[11px] px-2 py-0.5 rounded bg-purple-500/30 text-fuchsia-200 border border-fuchsia-400/40 group-hover:bg-black/40 group-hover:text-white">1 ELO</span>
-                    <span class="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">BOSS</span>
-                  </div>
-                  <div class="text-xs text-purple-200/80 group-hover:text-white">"Pío pío... solo soy una inocente torcaza..."</div>
-                </div>
-              </div>
-              <span class="text-lg font-bold text-fuchsia-300 group-hover:text-white">→</span>
-            </button>
-
-            <!-- BOSS SUPREMO: COPITO EL GRAN MAESTRO (0 ELO APARENTE / 3000 ELO REAL) -->
-            <button type="button" onclick="window.startGame('bot', 3000)" class="w-full group flex items-center justify-between p-3 bg-gradient-to-r from-[#262a30] via-[#381d25] to-[#262a30] hover:from-amber-600 hover:to-rose-700 border-2 border-amber-400/75 hover:border-amber-200 rounded-xl transition-all text-left shadow-lg shadow-amber-950/50">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl">👑</span>
-                <div>
-                  <div class="font-black text-sm text-white flex items-center gap-2">
-                    Copito el Gran Maestro <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/30 text-amber-200 border border-amber-400/50 group-hover:bg-black/40 group-hover:text-white">0 ELO</span>
-                    <span class="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-rose-500/30 text-rose-200">REY</span>
-                  </div>
-                  <div class="text-xs text-amber-200/90 group-hover:text-white">"Pío pío... ¿listo para la revancha?"</div>
-                </div>
-              </div>
-              <span class="text-lg font-bold text-amber-300 group-hover:text-white">→</span>
-            </button>
-
-            <!-- MODO LOCAL -->
-            <button type="button" onclick="window.startGame('local', 0)" class="w-full group flex items-center justify-between p-3 bg-[#16181c] hover:bg-amber-600 border border-gray-800 hover:border-amber-400 rounded-xl transition-all text-left">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl">👥</span>
-                <div>
-                  <div class="font-bold text-sm text-white">Jugar contra ti mismo (Tablero Local)</div>
-                  <div class="text-xs text-gray-400 group-hover:text-gray-100">Controla blancas y negras en el mismo tablero</div>
-                </div>
-              </div>
-              <span class="text-lg font-bold text-gray-400 group-hover:text-white">→</span>
-            </button>
-
-            <!-- EMPAREJAMIENTO RANDOM "ONLINE" (BOTS CON PERFILES) -->
-            <button type="button" onclick="window.openRandomMatchmaking()" class="w-full group flex items-center justify-between p-3 bg-gradient-to-r from-cyan-950/60 via-[#222834] to-emerald-950/60 hover:from-cyan-700 hover:to-emerald-700 border border-cyan-500/50 hover:border-cyan-200 rounded-xl transition-all text-left shadow-lg">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl">🌐</span>
-                <div>
-                  <div class="font-black text-sm text-white flex items-center gap-2">
-                    Partida Rápida Random <span class="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-cyan-500/25 text-cyan-200 border border-cyan-400/40">ONLINE SIM</span>
-                  </div>
-                  <div class="text-xs text-cyan-100/80 group-hover:text-white">Busca un rival aleatorio de cualquier nivel y país</div>
-                </div>
-              </div>
-              <span class="text-lg font-bold text-cyan-300 group-hover:text-white">⚡</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Modal de Búsqueda de Rival Random -->
-      <div id="matchmakingModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-[#1c1f24] border border-cyan-500/50 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl">
-          <div id="mmSpinner" class="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/15 border border-cyan-400/40 flex items-center justify-center text-3xl animate-bounce">
-            🌐
-          </div>
-          <div id="mmTitle" class="text-lg font-black text-white">Buscando rival en línea...</div>
-          <p id="mmStatus" class="text-xs text-gray-400">Escaneando salas rápidas y ajustando emparejamiento...</p>
-          <div id="mmRivalCard" class="hidden bg-[#14161a] border border-gray-800 rounded-xl p-3 flex items-center gap-3 text-left">
-            <div id="mmRivalAvatar" class="w-11 h-11 rounded-xl bg-[#252930] flex items-center justify-center text-2xl">🎯</div>
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-1.5">
-                <span id="mmRivalName" class="font-bold text-sm text-white truncate">Rival</span>
-                <span id="mmRivalFlag" class="text-sm">🇧🇷</span>
-              </div>
-              <div id="mmRivalMeta" class="text-xs font-bold text-cyan-400">1200 ELO • Estilo Táctico</div>
             </div>
-          </div>
-          <div class="flex gap-2 pt-1">
-            <button type="button" id="mmCancelBtn" onclick="window.closeMatchmaking()" class="flex-1 py-2.5 px-4 bg-gray-700 hover:bg-gray-600 text-white text-xs font-bold rounded-xl transition">
-              Cancelar
-            </button>
-            <button type="button" id="mmPlayBtn" onclick="window.acceptRandomMatch()" class="hidden flex-1 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition">
-              ¡A jugar! ⚔️
-            </button>
-          </div>
+            <span class="text-lg font-bold text-gray-400 group-hover:text-white">→</span>
+          </button>
+
+          <button type="button" onclick="window.startGame('bot', 800)" class="w-full group flex items-center justify-between p-3 bg-[#262a30] hover:bg-[#739552] border border-gray-700 rounded-xl transition text-left">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🧐</span>
+              <div>
+                <div class="font-bold text-sm text-white">Bot "El Táctico" <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">800 ELO</span></div>
+                <div class="text-xs text-gray-400 group-hover:text-gray-100">Entrena defensa, ataques dobles y cálculo</div>
+              </div>
+            </div>
+            <span class="text-lg font-bold text-gray-400 group-hover:text-white">→</span>
+          </button>
+
+          <button type="button" onclick="window.startGame('bot', 2400)" class="w-full group flex items-center justify-between p-3 bg-gradient-to-r from-[#262a30] via-[#2b1d2e] to-[#262a30] hover:from-purple-700 hover:to-fuchsia-700 border border-purple-500/60 rounded-xl transition text-left">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🕊️</span>
+              <div>
+                <div class="font-black text-sm text-white">Copito <span class="text-[11px] px-2 py-0.5 rounded bg-purple-500/30 text-fuchsia-200">1 ELO REAL 2400</span></div>
+                <div class="text-xs text-purple-200/80 group-hover:text-white">"Pío pío... solo soy una inocente torcaza..."</div>
+              </div>
+            </div>
+            <span class="text-lg font-bold text-fuchsia-300 group-hover:text-white">→</span>
+          </button>
+
+          <button type="button" onclick="window.startGame('bot', 3000)" class="w-full group flex items-center justify-between p-3 bg-gradient-to-r from-[#262a30] via-[#381d25] to-[#262a30] hover:from-amber-600 hover:to-rose-700 border border-amber-400/70 rounded-xl transition text-left">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">👑</span>
+              <div>
+                <div class="font-black text-sm text-white">Copito el Gran Maestro <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/30 text-amber-200">0 ELO / 3000</span></div>
+                <div class="text-xs text-amber-200/90 group-hover:text-white">"Pío pío... ¿listo para la revancha?"</div>
+              </div>
+            </div>
+            <span class="text-lg font-bold text-amber-300 group-hover:text-white">→</span>
+          </button>
+
+          <!-- PARTIDA RÁPIDA RANDOM ONLINE (50 BOTS HASTA 3.000 ELO - SIN ENTRENADOR) -->
+          <button type="button" onclick="window.openRandomMatchmaking()" class="w-full group flex items-center justify-between p-3 bg-gradient-to-r from-cyan-950/70 via-[#222834] to-emerald-950/70 hover:from-cyan-700 hover:to-emerald-700 border border-cyan-500/60 rounded-xl transition text-left shadow-lg">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🌐</span>
+              <div>
+                <div class="font-black text-sm text-white flex items-center gap-2 flex-wrap">
+                  Partida Rápida Random <span class="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/25 text-cyan-200 border border-cyan-400/40">50 BOTS • HASTA 3.000 ELO</span>
+                </div>
+                <div class="text-xs text-cyan-100/80 group-hover:text-white">Solo online • Sin entrenador • Rivales de 200 hasta 3.000 ELO</div>
+              </div>
+            </div>
+            <span class="text-lg font-bold text-cyan-300 group-hover:text-white">⚡</span>
+          </button>
+
+          <!-- BOTÓN PRINCIPAL DE TORNEOS (LLEVA A LA PÁGINA DE SELECCIÓN SUB1 / SUB2 / SUB3) -->
+          <button type="button" onclick="window.openTournamentLobbyPage()" class="w-full group flex items-center justify-between p-3.5 bg-gradient-to-r from-amber-600/30 via-yellow-500/20 to-amber-600/30 hover:from-amber-500 hover:to-yellow-500 border-2 border-amber-400/80 rounded-xl transition text-left shadow-lg">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🏆</span>
+              <div>
+                <div class="font-black text-sm text-amber-200 group-hover:text-gray-950 flex items-center gap-2">
+                  MODO TORNEO <span class="text-[10px] px-2 py-0.5 rounded bg-amber-400/25 text-amber-300 group-hover:bg-black/20 group-hover:text-gray-950">SUB1 • SUB2 • SUB3</span>
+                </div>
+                <div class="text-xs text-amber-100/80 group-hover:text-gray-950 font-medium">Elige tu categoría y gana la corona de campeón</div>
+              </div>
+            </div>
+            <span class="text-lg font-black text-amber-300 group-hover:text-gray-950">→</span>
+          </button>
         </div>
       </div>
 
-      <!-- =================================================================
-           PESTAÑA 2: CREAR / EDITAR CUENTA DE JUGADOR
-           ================================================================= -->
-      <div id="tabProfile" class="hidden max-w-2xl mx-auto space-y-6">
-        <div>
-          <h2 class="text-2xl font-black text-white">👤 Tu Cuenta de Leftchess.com</h2>
-          <p class="text-xs text-gray-400 mt-1">Personaliza tu identidad de Gran Maestro para mostrarla en tus partidas.</p>
+      <!-- PESTAÑA 2: 50 BOTS ONLINE (HASTA 3.000 ELO) -->
+      <div id="tabPool" class="hidden space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-black text-white">🤖 50 Bots Exclusivos para Online (Hasta 3.000 ELO)</h2>
+            <p class="text-xs text-gray-400">Elige un bot específico o entra a Partida Rápida Random para enfrentar cualquiera de los 50 (sin entrenador).</p>
+          </div>
+          <input id="botSearchInput" type="text" oninput="window.renderBotsList()" placeholder="Buscar bot, ELO o estilo..." class="px-3 py-2 bg-[#16181c] border border-gray-700 rounded-xl text-xs text-white outline-none focus:border-cyan-400" />
         </div>
 
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" onclick="window.setBotFilter('all')" id="filterAll" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-600 text-white">Todos (50)</button>
+          <button type="button" onclick="window.setBotFilter('sub1')" id="filterSub1" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#23272f] text-gray-300">200–500 ELO</button>
+          <button type="button" onclick="window.setBotFilter('sub2')" id="filterSub2" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#23272f] text-gray-300">501–1000 ELO</button>
+          <button type="button" onclick="window.setBotFilter('sub3')" id="filterSub3" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#23272f] text-gray-300">1001–2999 ELO</button>
+          <button type="button" onclick="window.setBotFilter('3000')" id="filter3000" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#23272f] text-gray-300">3.000 ELO</button>
+        </div>
+
+        <div id="botsListContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[430px] overflow-y-auto pr-1"></div>
+      </div>
+
+      <!-- PESTAÑA 3: PERFIL -->
+      <div id="tabProfile" class="hidden max-w-2xl mx-auto space-y-5">
+        <div>
+          <h2 class="text-2xl font-black text-white">👤 Tu Cuenta en Leftchess.com</h2>
+          <p class="text-xs text-gray-400 mt-1">Se guarda automáticamente en la nube para que nunca pierdas tu progreso ni coronas.</p>
+        </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#16181c] p-5 rounded-2xl border border-gray-800">
-          <!-- Nombre -->
           <div class="space-y-1.5">
             <label class="text-xs font-bold uppercase text-gray-400">Nombre de Usuario</label>
-            <input type="text" id="inputUsername" maxlength="20" placeholder="Ej: Magnus_CR" class="w-full px-3.5 py-2.5 bg-[#23272f] border border-gray-700 focus:border-[#81b64c] rounded-xl text-sm text-white outline-none">
+            <input type="text" id="inputUsername" maxlength="20" class="w-full px-3.5 py-2.5 bg-[#23272f] border border-gray-700 rounded-xl text-sm text-white outline-none" />
           </div>
-
-          <!-- País -->
           <div class="space-y-1.5">
             <label class="text-xs font-bold uppercase text-gray-400">País / Bandera</label>
-            <select id="inputCountry" class="w-full px-3.5 py-2.5 bg-[#23272f] border border-gray-700 focus:border-[#81b64c] rounded-xl text-sm text-white outline-none">
+            <select id="inputCountry" class="w-full px-3.5 py-2.5 bg-[#23272f] border border-gray-700 rounded-xl text-sm text-white outline-none">
               <option value="🇨🇴|Colombia">🇨🇴 Colombia</option>
               <option value="🇲🇽|México">🇲🇽 México</option>
               <option value="🇦🇷|Argentina">🇦🇷 Argentina</option>
               <option value="🇪🇸|España">🇪🇸 España</option>
               <option value="🇨🇱|Chile">🇨🇱 Chile</option>
               <option value="🇵🇪|Perú">🇵🇪 Perú</option>
-              <option value="🇻🇪|Venezuela">🇻🇪 Venezuela</option>
-              <option value="🇪🇨|Ecuador">🇪🇨 Ecuador</option>
               <option value="🇺🇸|Estados Unidos">🇺🇸 Estados Unidos</option>
-              <option value="🇳🇴|Noruega">🇳🇴 Noruega</option>
             </select>
           </div>
-
-          <!-- Avatar -->
           <div class="sm:col-span-2 space-y-1.5">
-            <label class="text-xs font-bold uppercase text-gray-400">Elige tu Avatar</label>
-            <div id="avatarPicker" class="flex flex-wrap gap-2">
-              <!-- Se llena por JS -->
-            </div>
+            <label class="text-xs font-bold uppercase text-gray-400">Avatar</label>
+            <div id="avatarPicker" class="flex flex-wrap gap-2"></div>
           </div>
-
-          <!-- Descripción -->
           <div class="sm:col-span-2 space-y-1.5">
-            <label class="text-xs font-bold uppercase text-gray-400">Descripción / Frase de Batalla</label>
-            <textarea id="inputBio" rows="3" maxlength="120" placeholder="Escribe tu lema de ajedrecista..." class="w-full px-3.5 py-2.5 bg-[#23272f] border border-gray-700 focus:border-[#81b64c] rounded-xl text-sm text-white outline-none resize-none"></textarea>
+            <label class="text-xs font-bold uppercase text-gray-400">Descripción</label>
+            <textarea id="inputBio" rows="2" maxlength="120" class="w-full px-3.5 py-2.5 bg-[#23272f] border border-gray-700 rounded-xl text-sm text-white outline-none resize-none"></textarea>
           </div>
-
           <div class="sm:col-span-2 flex items-center justify-between pt-2">
-            <span id="profileSavedToast" class="text-xs font-bold text-[#81b64c] opacity-0 transition-opacity">
-              ✅ ¡Perfil actualizado correctamente!
-            </span>
-            <button type="button" onclick="window.saveProfile()" class="px-6 py-2.5 bg-[#739552] hover:bg-[#84ab5e] text-white font-bold text-sm rounded-xl shadow-lg transition">
-              💾 Guardar Cuenta
+            <span id="profileSavedToast" class="text-xs font-bold text-[#81b64c] opacity-0 transition-opacity">✅ ¡Guardado en la nube!</span>
+            <button type="button" onclick="window.saveProfile()" class="px-6 py-2.5 bg-[#739552] hover:bg-[#84ab5e] text-white font-bold text-sm rounded-xl transition">
+              💾 Guardar Cuenta en la Nube
             </button>
           </div>
         </div>
       </div>
 
-      <!-- =================================================================
-           PESTAÑA 3: PERSONALIZAR TABLERO Y FICHAS
-           ================================================================= -->
-      <div id="tabCustomize" class="hidden space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            <h2 class="text-2xl font-black text-white">🎨 Estudio de Tablero y Fichas</h2>
-            <p class="text-xs text-gray-400">Combina colores de tablero y estilos de piezas a tu gusto.</p>
-          </div>
-          <button type="button" onclick="window.switchMenuTab('play')" class="px-4 py-2 bg-[#739552] hover:bg-[#84ab5e] text-white text-xs font-bold rounded-xl transition self-start">
-            ⚔️ Ir a Jugar con este estilo
-          </button>
+      <!-- PESTAÑA 4: PERSONALIZAR TABLERO Y FICHAS -->
+      <div id="tabCustomize" class="hidden space-y-5">
+        <div>
+          <h2 class="text-2xl font-black text-white">🎨 Tablero y Fichas</h2>
+          <p class="text-xs text-gray-400">Elige tu tema favorito y guárdalo en la nube.</p>
         </div>
-
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          <!-- Vista Previa Grande en Estudio -->
-          <div class="lg:col-span-5 bg-[#16181c] border border-gray-800 rounded-2xl p-4 flex flex-col items-center space-y-3">
-            <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Vista Previa en Vivo</span>
-            <div id="studioPreviewBoard" class="w-full max-w-[300px] aspect-square grid grid-cols-8 grid-rows-8 rounded-xl overflow-hidden border-2 border-gray-700 shadow-2xl"></div>
+          <div class="lg:col-span-5 bg-[#16181c] border border-gray-800 rounded-2xl p-4 flex flex-col items-center">
+            <div id="studioPreviewBoard" class="w-full max-w-[280px] aspect-square grid grid-cols-8 grid-rows-8 rounded-xl overflow-hidden border-2 border-gray-700"></div>
           </div>
-
-          <!-- Selectores de Tema -->
-          <div class="lg:col-span-7 space-y-5">
-            <!-- Temas de Tablero -->
-            <div class="space-y-2">
-              <div class="text-xs font-bold uppercase tracking-wider text-gray-400">1. Color del Tablero</div>
-              <div id="boardThemeGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5"></div>
+          <div class="lg:col-span-7 space-y-4">
+            <div>
+              <div class="text-xs font-bold uppercase text-gray-400 mb-2">Color del Tablero</div>
+              <div id="boardThemeGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
             </div>
-
-            <!-- Estilos de Fichas -->
-            <div class="space-y-2">
-              <div class="text-xs font-bold uppercase tracking-wider text-gray-400">2. Diseño de las Fichas</div>
-              <div id="pieceThemeGrid" class="grid grid-cols-2 gap-2.5"></div>
+            <div>
+              <div class="text-xs font-bold uppercase text-gray-400 mb-2">Estilo de Fichas</div>
+              <div id="pieceThemeGrid" class="grid grid-cols-2 gap-2"></div>
             </div>
           </div>
         </div>
       </div>
-
     </main>
   </div>
 
   <!-- =====================================================================
-       PANTALLA DE JUEGO
+       PÁGINA DE SELECCIÓN DE TORNEOS (SUB1 / SUB2 / SUB3)
        ===================================================================== -->
-  <div id="gameScreen" class="hidden w-full max-w-5xl flex-col lg:flex-row items-center lg:items-stretch justify-center gap-6">
-    
-    <!-- Columna Izquierda / Centro: Jugadores + Tablero -->
-    <div class="w-full max-w-[560px] flex flex-col gap-3">
-      
-      <!-- Barra Jugador Superior (Negras) -->
-      <div class="flex items-center justify-between bg-[#1c1f24] px-4 py-2.5 rounded-xl border border-gray-800">
-        <div class="flex items-center gap-3">
-          <div id="blackAvatar" class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-xl border border-gray-700">
-            🤖
+  <div id="tournamentLobbyPage" class="hidden w-full max-w-4xl bg-[#1c1f24] border border-amber-500/40 rounded-2xl shadow-2xl p-6 space-y-6">
+    <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+      <div>
+        <h2 class="text-2xl font-black text-amber-300">🏆 Centro de Torneos Oficiales</h2>
+        <p class="text-xs text-gray-400 mt-1">Selecciona tu categoría de ELO. Al ganar obtendrás tu corona y título exclusivo.</p>
+      </div>
+      <button type="button" onclick="window.closeTournamentLobbyPage()" class="px-4 py-2 rounded-xl bg-[#252930] hover:bg-[#323842] text-xs font-bold text-gray-200 border border-gray-700">
+        ← Volver al Menú
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- SUB1 -->
+      <div class="bg-[#16181c] border border-emerald-500/40 rounded-2xl p-5 flex flex-col justify-between gap-4">
+        <div class="space-y-2">
+          <div class="inline-block text-[11px] font-black px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">CATEGORÍA SUB1</div>
+          <h3 class="text-xl font-black text-white">Torneo SUB1</h3>
+          <p class="text-xs text-gray-400">Para jugadores de <span class="text-white font-bold">200 a 500 ELO</span>.</p>
+          <div class="text-xs text-amber-300 font-bold pt-1">⚔️ Duración: 10 partidas</div>
+          <div class="text-[11px] text-gray-400">Premio: 👑 SUB1 Tournament Winner</div>
+        </div>
+        <button type="button" onclick="window.enterTournamentWaitingRoom('SUB1')" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition">
+          Entrar al SUB1 ⚡
+        </button>
+      </div>
+
+      <!-- SUB2 -->
+      <div class="bg-[#16181c] border border-sky-500/40 rounded-2xl p-5 flex flex-col justify-between gap-4">
+        <div class="space-y-2">
+          <div class="inline-block text-[11px] font-black px-2.5 py-0.5 rounded bg-sky-500/20 text-sky-300">CATEGORÍA SUB2</div>
+          <h3 class="text-xl font-black text-white">Torneo SUB2</h3>
+          <p class="text-xs text-gray-400">Para jugadores de <span class="text-white font-bold">500 a 1.000 ELO</span>.</p>
+          <div class="text-xs text-amber-300 font-bold pt-1">⚔️ Duración: 20 partidas</div>
+          <div class="text-[11px] text-gray-400">Premio: 👑 SUB2 Tournament Winner</div>
+        </div>
+        <button type="button" onclick="window.enterTournamentWaitingRoom('SUB2')" class="w-full py-2.5 px-4 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-black text-xs transition">
+          Entrar al SUB2 ⚡
+        </button>
+      </div>
+
+      <!-- SUB3 -->
+      <div class="bg-[#16181c] border border-amber-500/50 rounded-2xl p-5 flex flex-col justify-between gap-4">
+        <div class="space-y-2">
+          <div class="inline-block text-[11px] font-black px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300">CATEGORÍA SUB3</div>
+          <h3 class="text-xl font-black text-white">Torneo SUB3</h3>
+          <p class="text-xs text-gray-400">Para jugadores de <span class="text-white font-bold">1.000 a 3.000 ELO</span>.</p>
+          <div class="text-xs text-amber-300 font-bold pt-1">⚔️ Duración: 30 partidas</div>
+          <div class="text-[11px] text-gray-400">Premio: 👑 SUB3 Tournament Winner</div>
+        </div>
+        <button type="button" onclick="window.enterTournamentWaitingRoom('SUB3')" class="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-gray-950 font-black text-xs transition">
+          Entrar al SUB3 ⚡
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       PÁGINA DE TABLA DEL TORNEO + ESPERA + BOTÓN VERDE SIGUIENTE PARTIDA
+       ===================================================================== -->
+  <div id="tournamentStandingsPage" class="hidden w-full max-w-4xl bg-[#1c1f24] border border-amber-500/50 rounded-2xl shadow-2xl p-6 space-y-5">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-800 pb-4">
+      <div>
+        <div id="standingsTitle" class="text-2xl font-black text-amber-300">🏆 Tabla del Torneo SUB1</div>
+        <div id="standingsSubtitle" class="text-xs text-gray-400 mt-0.5">Partida 0 de 10 • Mejores jugadores en competencia</div>
+      </div>
+      <button type="button" onclick="window.abandonTournamentToMenu()" class="px-3.5 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300 self-start sm:self-auto">
+        Salir del Torneo
+      </button>
+    </div>
+
+    <!-- Banner de Espera / Inicio Automático -->
+    <div id="tournamentWaitingBanner" class="bg-amber-500/10 border border-amber-400/40 rounded-xl p-4 flex items-center gap-3">
+      <span id="waitingIcon" class="text-2xl animate-spin">⏳</span>
+      <div>
+        <div id="waitingTitle" class="text-sm font-black text-amber-200">Esperando a que comience el torneo...</div>
+        <div id="waitingDesc" class="text-xs text-amber-100/75">Emparejando competidores del bracket. Al completarse iniciarás automáticamente.</div>
+      </div>
+    </div>
+
+    <!-- Animación de Campeón al Ganar -->
+    <div id="championBanner" class="hidden bg-gradient-to-r from-amber-600/30 via-yellow-400/25 to-amber-600/30 border-2 border-amber-300 rounded-2xl p-5 text-center space-y-2 shadow-xl">
+      <div class="text-5xl champion-crown-anim inline-block">👑</div>
+      <div id="championHeading" class="text-2xl font-black text-amber-200">¡ERES EL CAMPEÓN DEL TORNEO!</div>
+      <p id="championSubtext" class="text-xs text-amber-100"></p>
+    </div>
+
+    <!-- Tabla de Clasificación -->
+    <div class="bg-[#14161a] border border-gray-800 rounded-2xl overflow-hidden">
+      <div class="grid grid-cols-12 px-4 py-2.5 bg-[#1b1e24] text-[11px] font-black uppercase text-gray-400 border-b border-gray-800">
+        <div class="col-span-1">#</div>
+        <div class="col-span-5">Jugador / Rival</div>
+        <div class="col-span-2 text-center">ELO</div>
+        <div class="col-span-2 text-center">Estado</div>
+        <div class="col-span-2 text-right">Puntos</div>
+      </div>
+      <div id="standingsRows" class="divide-y divide-gray-800/80 max-h-72 overflow-y-auto text-xs"></div>
+    </div>
+
+    <!-- Botón Verde Inferior: Siguiente partida -->
+    <div class="flex items-center justify-end gap-3 pt-1">
+      <button type="button" id="nextMatchGreenBtn" onclick="window.launchNextTournamentMatch()" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm shadow-lg shadow-emerald-950/50 transition">
+        Siguiente partida ⚡
+      </button>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL EMPAREJAMIENTO RANDOM ONLINE (50 BOTS)
+       ===================================================================== -->
+  <div id="matchmakingModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-[#1c1f24] border border-cyan-500/50 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl">
+      <div id="mmSpinner" class="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/15 border border-cyan-400/40 flex items-center justify-center text-3xl animate-bounce">
+        🌐
+      </div>
+      <div id="mmTitle" class="text-lg font-black text-white">Buscando rival en línea...</div>
+      <p id="mmStatus" class="text-xs text-gray-400">Conectando con 50 bots online (hasta 3.000 ELO)...</p>
+      <div id="mmRivalCard" class="hidden bg-[#14161a] border border-gray-800 rounded-xl p-3 flex items-center gap-3 text-left">
+        <div id="mmRivalAvatar" class="w-11 h-11 rounded-xl bg-[#252930] flex items-center justify-center text-2xl">🎯</div>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-1.5">
+            <span id="mmRivalName" class="font-bold text-sm text-white truncate">Rival</span>
+            <span id="mmRivalFlag" class="text-sm">🇨🇴</span>
           </div>
+          <div id="mmRivalMeta" class="text-xs font-bold text-cyan-400">1200 ELO • Estilo Táctico</div>
+        </div>
+      </div>
+      <div class="flex gap-2 pt-1">
+        <button type="button" id="mmCancelBtn" onclick="window.closeMatchmaking()" class="flex-1 py-2.5 px-4 bg-gray-700 hover:bg-gray-600 text-white text-xs font-bold rounded-xl transition">
+          Cancelar
+        </button>
+        <button type="button" id="mmPlayBtn" onclick="window.acceptRandomMatch()" class="hidden flex-1 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition">
+          ¡A jugar! ⚔️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       PANTALLA DE JUEGO (CON ENTRENADOR A LA IZQUIERDA EN MODO ENTRENAMIENTO)
+       ===================================================================== -->
+  <div id="gameScreen" class="hidden w-full max-w-6xl flex-col lg:flex-row items-center lg:items-stretch justify-center gap-4">
+
+    <!-- PANEL IZQUIERDO: ENTRENADOR INTELIGENTE (OCULTO EN PARTIDAS ONLINE) -->
+    <aside id="coachSidebar" class="w-full max-w-[540px] lg:w-72 bg-[#1c1f24] border border-indigo-500/40 rounded-2xl p-4 flex flex-col justify-between gap-3">
+      <div class="space-y-3">
+        <div class="flex items-center gap-2.5 bg-[#14161a] p-3 rounded-xl border border-indigo-500/30">
+          <div id="coachAvatar" class="w-11 h-11 rounded-xl bg-indigo-500/20 flex items-center justify-center text-2xl">🧠</div>
           <div>
-            <div class="flex items-center gap-2">
-              <span id="blackName" class="font-bold text-sm sm:text-base text-white">Bot</span>
-              <span id="blackEloBadge" class="text-[11px] font-bold px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30">200 ELO</span>
-            </div>
-            <div id="capturedByBlack" class="flex items-center gap-0.5 h-5 text-xs text-gray-400 mt-0.5"></div>
+            <div id="coachName" class="text-xs font-black text-indigo-300">Coach Valen</div>
+            <div id="coachMeta" class="text-[11px] text-gray-400">GM Táctico • 2850 ELO</div>
           </div>
         </div>
-        <div id="blackTurnBadge" class="hidden px-3 py-1 rounded-full text-xs font-bold bg-[#739552] text-white animate-pulse">
-          Pensando...
+
+        <div class="bg-[#161920] border border-gray-800 rounded-xl p-3.5 space-y-1.5">
+          <div class="text-[10px] font-black uppercase tracking-wider text-indigo-400">💡 Consejo en tiempo real</div>
+          <p id="coachTipText" class="text-xs text-gray-200 leading-relaxed">
+            Controla las casillas centrales (e4, d4, e5, d5) y desarrolla tus caballos antes que la dama.
+          </p>
+        </div>
+
+        <div class="bg-[#161920] border border-gray-800 rounded-xl p-3 space-y-1">
+          <div class="text-[10px] font-black uppercase tracking-wider text-gray-400">🎯 Objetivo táctico</div>
+          <p id="coachPlanText" class="text-xs text-emerald-300 font-semibold">
+            Busca piezas sueltas o amenazas sobre el rey rival.
+          </p>
         </div>
       </div>
 
-      <!-- TABLERO DE AJEDREZ CON CAPA DE FLECHAS -->
+      <button type="button" onclick="window.suggestCoachMove()" class="w-full py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black transition">
+        ✨ Pedir sugerencia al entrenador
+      </button>
+    </aside>
+
+    <!-- CENTRO: JUGADORES + TABLERO -->
+    <div class="w-full max-w-[540px] flex flex-col gap-2.5">
+      <div class="flex items-center justify-between bg-[#1c1f24] px-4 py-2.5 rounded-xl border border-gray-800">
+        <div class="flex items-center gap-3">
+          <div id="blackAvatar" class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-xl">🤖</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="blackName" class="font-bold text-sm text-white">Rival</span>
+              <span id="blackEloBadge" class="text-[11px] font-bold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">800 ELO</span>
+            </div>
+            <div id="capturedByBlack" class="text-xs text-gray-400 h-4"></div>
+          </div>
+        </div>
+        <div id="blackTurnBadge" class="hidden px-3 py-1 rounded-full text-xs font-bold bg-[#739552] text-white">Pensando...</div>
+      </div>
+
       <div class="board-wrapper" id="boardWrapper">
         <div id="chessBoard" class="board-grid"></div>
         <svg id="arrowOverlay" viewBox="0 0 800 800"></svg>
 
-        <!-- Modal de Coronación de Peón -->
         <div id="promotionModal" class="hidden absolute inset-0 bg-black/75 backdrop-blur-sm rounded-xl z-20 flex flex-col items-center justify-center p-4">
           <div class="bg-[#1c1f24] border border-gray-700 p-5 rounded-2xl shadow-2xl text-center">
-            <h3 class="text-lg font-bold text-white mb-3">¡Corona tu peón! Elige una pieza:</h3>
+            <h3 class="text-lg font-bold text-white mb-3">¡Corona tu peón!</h3>
             <div id="promotionChoices" class="flex gap-3 justify-center"></div>
           </div>
         </div>
 
-        <!-- Modal de Fin de Partida -->
-        <div id="gameOverModal" class="hidden absolute inset-0 bg-black/80 backdrop-blur-sm rounded-xl z-30 flex flex-col items-center justify-center p-6 text-center">
+        <div id="gameOverModal" class="hidden absolute inset-0 bg-black/80 backdrop-blur-sm rounded-xl z-30 flex items-center justify-center p-6 text-center">
           <div class="bg-[#1c1f24] border-2 border-[#739552] p-6 rounded-2xl shadow-2xl max-w-sm w-full space-y-4">
             <div id="gameOverIcon" class="text-5xl">🏆</div>
-            <h2 id="gameOverTitle" class="text-2xl font-black text-white">¡Jaque Mate!</h2>
-            <p id="gameOverReason" class="text-sm text-gray-300">Las blancas ganan la partida.</p>
+            <h2 id="gameOverTitle" class="text-2xl font-black text-white">¡Partida terminada!</h2>
+            <p id="gameOverReason" class="text-sm text-gray-300"></p>
             <div class="bg-[#121417] p-3 rounded-xl border border-gray-800">
-              <div class="text-xs text-gray-400">Rendimiento estimado en esta partida</div>
-              <div id="finalEloDisplay" class="text-2xl font-black text-[#1baca6]">850 ELO</div>
+              <div class="text-xs text-gray-400">ELO actualizado</div>
+              <div id="finalEloDisplay" class="text-2xl font-black text-[#1baca6]">600 ELO</div>
             </div>
-            <div class="flex flex-col sm:flex-row gap-2 pt-1">
-              <button type="button" onclick="window.resetMatch()" class="flex-1 py-2.5 px-4 bg-[#739552] hover:bg-[#82a85d] text-white font-bold rounded-xl transition">
-                🔄 Revancha
+            <div class="flex flex-col gap-2 pt-1">
+              <button type="button" id="gameOverTourneyStandingsBtn" onclick="window.returnFromMatchToStandings()" class="hidden w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs rounded-xl transition">
+                📊 Ver Tabla del Torneo
               </button>
-              <button type="button" onclick="window.backToMenu()" class="flex-1 py-2.5 px-4 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-xl transition">
-                🏠 Menú
-              </button>
+              <div class="flex gap-2" id="gameOverStandardActions">
+                <button type="button" onclick="window.resetMatch()" class="flex-1 py-2.5 px-3 bg-[#739552] hover:bg-[#82a85d] text-white text-xs font-bold rounded-xl transition">🔄 Revancha</button>
+                <button type="button" onclick="window.backToMenu()" class="flex-1 py-2.5 px-3 bg-gray-700 hover:bg-gray-600 text-white text-xs font-bold rounded-xl transition">🏠 Menú</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Barra Jugador Inferior (Blancas) -->
       <div class="flex items-center justify-between bg-[#1c1f24] px-4 py-2.5 rounded-xl border border-gray-800">
         <div class="flex items-center gap-3">
-          <div id="whiteAvatarBox" class="w-10 h-10 rounded-lg bg-gray-200 text-gray-900 flex items-center justify-center text-xl font-bold">
-            😎
-          </div>
+          <div id="whiteAvatarBox" class="w-10 h-10 rounded-lg bg-gray-200 text-gray-900 flex items-center justify-center text-xl font-bold">😎</div>
           <div>
-            <div class="flex items-center gap-2">
-              <span id="whiteName" class="font-bold text-sm sm:text-base text-white">Invitado 🇨🇴</span>
-              <span id="livePlayerEloBadge" class="text-[11px] font-bold px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/40">
-                ELO Est: 600
-              </span>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span id="whiteName" class="font-bold text-sm text-white">Invitado 🇨🇴</span>
+              <span id="livePlayerEloBadge" class="text-[11px] font-bold px-2 py-0.5 rounded bg-teal-500/20 text-teal-300">ELO: 600</span>
             </div>
-            <div id="whiteBioLine" class="text-[11px] text-gray-400 truncate max-w-[230px]"></div>
-            <div id="capturedByWhite" class="flex items-center gap-0.5 h-5 text-xs text-gray-400 mt-0.5"></div>
+            <div id="whiteCrownBadges" class="flex flex-wrap gap-1 mt-0.5"></div>
+            <div id="capturedByWhite" class="text-xs text-gray-400 h-4"></div>
           </div>
         </div>
-        <div id="whiteTurnBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
-          Tu turno
-        </div>
+        <div id="whiteTurnBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300">Tu turno</div>
       </div>
     </div>
 
-    <!-- Columna Derecha: Panel de Control, Alerta Brillante, ELO e Historial -->
-    <div class="w-full max-w-[560px] lg:w-80 bg-[#1c1f24] border border-gray-800 rounded-2xl p-4 flex flex-col justify-between gap-3">
-      
+    <!-- DERECHA: ANÁLISIS, CHAT E HISTORIAL -->
+    <div class="w-full max-w-[540px] lg:w-72 bg-[#1c1f24] border border-gray-800 rounded-2xl p-4 flex flex-col justify-between gap-3">
       <div class="space-y-3">
-        <!-- Alerta de Jugada Brillante / Calidad de Jugada -->
-        <div id="moveFeedbackBox" class="bg-[#14161a] p-3.5 rounded-xl border border-gray-800 transition-all duration-300">
+        <div id="moveFeedbackBox" class="bg-[#14161a] p-3.5 rounded-xl border border-gray-800">
           <div class="flex items-center justify-between mb-1">
-            <span class="text-[11px] uppercase tracking-wider text-gray-500 font-bold">Análisis de Jugada</span>
-            <span id="liveEloChip" class="text-xs font-black text-teal-400">Tu ELO: 600</span>
+            <span class="text-[10px] uppercase tracking-wider text-gray-500 font-bold">Análisis</span>
+            <span id="liveEloChip" class="text-xs font-black text-teal-400">ELO: 600</span>
           </div>
           <div id="moveQualityTitle" class="text-sm font-bold text-emerald-400">Turno de las Blancas</div>
-          <p id="moveQualityDesc" class="text-xs text-gray-400 mt-0.5">Arrastra una ficha o haz clic para mover.</p>
+          <p id="moveQualityDesc" class="text-xs text-gray-400 mt-0.5">Arrastra o haz clic para mover.</p>
         </div>
 
-        <!-- Comentario del Bot -->
-        <div id="botChatBox" class="bg-[#252930] p-3 rounded-xl border border-gray-700/70">
+        <div class="bg-[#252930] p-3 rounded-xl border border-gray-700/70">
           <div class="flex items-center justify-between text-xs font-bold text-amber-400 mb-1">
-            <span id="botChatTitle">🤖 Bot dice:</span>
-            <button type="button" onclick="window.clearArrows()" class="text-[11px] text-gray-400 hover:text-white underline">Limpiar flechas</button>
+            <span id="botChatTitle">🤖 Rival dice:</span>
+            <button type="button" onclick="window.clearArrows()" class="text-[11px] text-gray-400 hover:text-white underline">Limpiar</button>
           </div>
           <p id="botComment" class="text-xs text-gray-300 italic">"¡Listo para jugar!"</p>
         </div>
 
-        <!-- Historial de Jugadas -->
-        <div class="flex flex-col">
-          <div class="flex items-center justify-between mb-1.5">
-            <span class="text-xs uppercase tracking-wider text-gray-500 font-bold">Historial de jugadas</span>
-            <span class="text-[10px] text-gray-500">Clic derecho = flecha</span>
-          </div>
-          <div id="moveHistory" class="bg-[#14161a] border border-gray-800 rounded-xl p-3 h-44 lg:h-56 overflow-y-auto text-xs font-mono space-y-1">
+        <div>
+          <div class="text-xs uppercase tracking-wider text-gray-500 font-bold mb-1.5">Historial de jugadas</div>
+          <div id="moveHistory" class="bg-[#14161a] border border-gray-800 rounded-xl p-3 h-44 overflow-y-auto text-xs font-mono space-y-1">
             <div class="text-gray-500 italic">Aún no hay movimientos...</div>
           </div>
         </div>
       </div>
 
-      <!-- Botones de Acción -->
       <div class="space-y-2 pt-2 border-t border-gray-800">
-        <div class="grid grid-cols-2 gap-2">
-          <button type="button" onclick="window.resetMatch()" class="py-2.5 px-3 bg-[#2a2e35] hover:bg-[#353a42] text-white text-xs font-bold rounded-xl border border-gray-700 transition flex items-center justify-center gap-1.5">
-            🔄 Reiniciar
-          </button>
-          <button type="button" onclick="window.toggleSound()" id="gameSoundBtn" class="py-2.5 px-3 bg-[#2a2e35] hover:bg-[#353a42] text-white text-xs font-bold rounded-xl border border-gray-700 transition flex items-center justify-center gap-1.5">
-            🔊 Sonido: ON
-          </button>
-        </div>
-        <button type="button" onclick="window.backToMenu()" class="w-full py-2.5 px-4 bg-red-950/50 hover:bg-red-900/60 text-red-300 text-xs font-bold rounded-xl border border-red-900/50 transition flex items-center justify-center gap-2">
+        <button type="button" onclick="window.resetMatch()" class="w-full py-2.5 px-3 bg-[#2a2e35] hover:bg-[#353a42] text-white text-xs font-bold rounded-xl border border-gray-700 transition">
+          🔄 Reiniciar partida
+        </button>
+        <button type="button" onclick="window.backToMenu()" class="w-full py-2.5 px-4 bg-red-950/50 hover:bg-red-900/60 text-red-300 text-xs font-bold rounded-xl border border-red-900/50 transition">
           🏠 Volver al Menú Principal
         </button>
       </div>
@@ -644,69 +710,104 @@
   </div>
 
   <script>
-    /* ========================================================================
-       2. PIEZAS SVG DE AJEDREZ (CON MÚLTIPLES ESTILOS PERSONALIZABLES)
-       ======================================================================== */
     const BOARD_THEMES = {
-      classic:  { name: 'Verde Chess.com', light: '#ebecd0', dark: '#739552' },
-      walnut:   { name: 'Madera Nogal',    light: '#f0d9b5', dark: '#b58863' },
-      ocean:    { name: 'Azul Torneo',     light: '#dee3e6', dark: '#5d8aa8' },
-      obsidian: { name: 'Obsidiana Neón',  light: '#3b4252', dark: '#1e222a' },
-      marble:   { name: 'Mármol Real',     light: '#f3f4f6', dark: '#6b7280' },
-      cherry:   { name: 'Cerezo Imperial', light: '#fce7f3', dark: '#9d174d' },
-      ice:      { name: 'Mar Hielo',       light: '#e0f2fe', dark: '#0284c7' },
-      mahogany: { name: 'Madera Caoba',    light: '#edd6b8', dark: '#7c2d12' },
-      club:     { name: 'Tapete de Club',  light: '#e6edd8', dark: '#2f6f4e' },
-      sunset:   { name: 'Atardecer Cálido',light: '#fef3c7', dark: '#c2410c' }
+      classic: { name: 'Verde Chess.com', light: '#ebecd0', dark: '#739552' },
+      walnut:  { name: 'Madera Nogal',    light: '#f0d9b5', dark: '#b58863' },
+      ocean:   { name: 'Azul Torneo',     light: '#dee3e6', dark: '#5d8aa8' },
+      obsidian:{ name: 'Obsidiana Neón',  light: '#3b4252', dark: '#1e222a' },
+      marble:  { name: 'Mármol Real',     light: '#f3f4f6', dark: '#6b7280' },
+      cherry:  { name: 'Cerezo Imperial', light: '#fce7f3', dark: '#9d174d' }
     };
 
     const PIECE_THEMES = {
-      classic: {
-        name: 'Torneo Clásico',
-        desc: 'Blanco puro y negro mate',
-        wFill: '#ffffff', wStroke: '#1f2328', wDetail: '#1f2328',
-        bFill: '#1f2328', bStroke: '#000000', bDetail: '#d1d5db'
+      classic: { name: 'Torneo Clásico', desc: 'Blanco puro y negro mate', wFill: '#ffffff', wStroke: '#1f2328', wDetail: '#1f2328', bFill: '#1f2328', bStroke: '#000000', bDetail: '#d1d5db' },
+      gold:    { name: 'Oro y Ébano',    desc: 'Dorado real vs obsidiana',  wFill: '#fde047', wStroke: '#713f12', wDetail: '#854d0e', bFill: '#18181b', bStroke: '#eab308', bDetail: '#facc15' },
+      neon:    { name: 'Cyberpunk Neón', desc: 'Cian eléctrico vs fucsia',   wFill: '#22d3ee', wStroke: '#083344', wDetail: '#ecfeff', bFill: '#e879f9', bStroke: '#4a044e', bDetail: '#fdf4ff' },
+      emerald: { name: 'Cristal Jade',   desc: 'Marfil suave vs jade',       wFill: '#ecfdf5', wStroke: '#065f46', wDetail: '#059669', bFill: '#064e3b', bStroke: '#34d399', bDetail: '#6ee7b7' }
+    };
+
+    const COACH_PROFILES = {
+      stockfish_mentor: {
+        id: 'stockfish_mentor',
+        name: 'Coach Valen',
+        avatar: '🧠',
+        meta: 'GM Táctico • 2850 ELO',
+        openingTip: 'Toma el centro con peones (e4/d4) y desarrolla piezas menores antes de lanzar ataques.',
+        tacticPlan: 'Revisa jaques, capturas y piezas sin defensa antes de mover.'
       },
-      gold: {
-        name: 'Oro y Ébano',
-        desc: 'Acabado real dorado vs obsidiana',
-        wFill: '#fde047', wStroke: '#713f12', wDetail: '#854d0e',
-        bFill: '#18181b', bStroke: '#eab308', bDetail: '#facc15'
+      gambit_sensei: {
+        id: 'gambit_sensei',
+        name: 'Sensei Kronos',
+        avatar: '⚡',
+        meta: 'Maestro de Ataque • 2920 ELO',
+        openingTip: 'Busca líneas abiertas, diagonales peligrosas y enroca rápido para activar tus torres.',
+        tacticPlan: 'Crea amenazas simultáneas (ataques dobles y clavadas).'
       },
-      neon: {
-        name: 'Cyberpunk Neón',
-        desc: 'Cian eléctrico vs fucsia neón',
-        wFill: '#22d3ee', wStroke: '#083344', wDetail: '#ecfeff',
-        bFill: '#e879f9', bStroke: '#4a044e', bDetail: '#fdf4ff'
-      },
-      emerald: {
-        name: 'Cristal Esmeralda',
-        desc: 'Marfil suave vs jade profundo',
-        wFill: '#ecfdf5', wStroke: '#065f46', wDetail: '#059669',
-        bFill: '#064e3b', bStroke: '#34d399', bDetail: '#6ee7b7'
-      },
-      wood: {
-        name: 'Madera Staunton',
-        desc: 'Arce claro y nogal oscuro',
-        wFill: '#f5deb3', wStroke: '#5c3a21', wDetail: '#7c4a27',
-        bFill: '#5c3a21', bStroke: '#2b180c', bDetail: '#d6a87c'
-      },
-      glacier: {
-        name: 'Cristal Glaciar',
-        desc: 'Escarcha azul vs zafiro profundo',
-        wFill: '#f0f9ff', wStroke: '#0369a1', wDetail: '#0284c7',
-        bFill: '#0c4a6e', bStroke: '#38bdf8', bDetail: '#bae6fd'
-      },
-      ruby: {
-        name: 'Rubí Imperial',
-        desc: 'Perla marfil vs carmesí real',
-        wFill: '#fff7ed', wStroke: '#7c2d12', wDetail: '#9a3412',
-        bFill: '#881337', bStroke: '#fda4af', bDetail: '#fecdd3'
+      endgame_sage: {
+        id: 'endgame_sage',
+        name: 'Sabia Minerva',
+        avatar: '🦉',
+        meta: 'Estratega Posicional • 2980 ELO',
+        openingTip: 'Evita debilitar casillas alrededor de tu rey y mantén tus piezas coordinadas.',
+        tacticPlan: 'Mejora la pieza peor colocada y simplifica cuando tengas ventaja.'
       }
     };
 
+    const AVATAR_OPTIONS = ['😎', '♞', '👑', '🔥', '🧠', '🦅', '🐉', '🤖', '🦊', '⚡', '🐺', '🦁', '🦉', '🦄', '🐼', '🐯'];
+    const ONLINE_FLAGS = ['🇨🇴', '🇲🇽', '🇦🇷', '🇪🇸', '🇨🇱', '🇵🇪', '🇧🇷', '🇺🇸', '🇯🇵', '🇩🇪', '🇫🇷', '🇳🇴'];
+
+    // 50 Bots variados exclusivos para Online Random y Torneos (hasta 3.000 ELO)
+    const FIFTY_BOT_NAMES = [
+      'Copito Junior', 'Torcaza Veloz', 'Peón Rebelde', 'Alfil Chispa', 'Caballo Loco',
+      'Torre de Cartón', 'Dama de Humo', 'Rey Dormilón', 'Mateo Cali', 'Sofía MX',
+      'Toro Blanco', 'Valen GM', 'Andrés Blitz', 'Lucía Queen', 'Sombra Nocturna',
+      'Relámpago Sur', 'Fénix Dorado', 'Vipera Táctica', 'Kronos 99', 'Atlas Central',
+      'Nova Endgames', 'Specter Gambit', 'Titan Posicional', 'Zephyr Attack', 'Omega Engine',
+      'Búho Sabio', 'Lobo Gris', 'Halcón Real', 'Cobra Rápida', 'Mago del Centro',
+      'Dragón Jade', 'Cometa Azul', 'Martillo Negro', 'Estrella Polar', 'Ciclón Rojo',
+      'Fantasma E4', 'Guardián D4', 'Corsario C3', 'Arquitecto F4', 'Centinela G6',
+      'Samurái Tablero', 'Vikingo H3', 'Cazador Diagonal', 'Oráculo Final', 'Coloso ELO',
+      'Emperador Blitz', 'Príncipe Táctico', 'Arquero Lateral', 'Sultán del Mate', 'Copito Supremo'
+    ];
+    const FIFTY_BOT_AVATARS = ['🕊️', '🤪', '🤓', '🧐', '🔥', '🐺', '🦊', '🦁', '🦉', '⚡', '👑', '🐉', '🤖', '🦅'];
+    const FIFTY_BOT_STYLES = ['Caótico', 'Casual', 'Táctico', 'Agresivo', 'Posicional', 'Finalista', 'Gran Maestro'];
+
+    const FIFTY_ONLINE_BOTS = Array.from({ length: 50 }, (_, idx) => {
+      const id = idx + 1;
+      const elo = id === 50 ? 3000 : Math.min(2950, 200 + idx * 55);
+      return {
+        id,
+        name: FIFTY_BOT_NAMES[idx] || `Bot Online #${id}`,
+        avatar: FIFTY_BOT_AVATARS[idx % FIFTY_BOT_AVATARS.length],
+        elo,
+        displayElo: `${elo} ELO`,
+        style: FIFTY_BOT_STYLES[idx % FIFTY_BOT_STYLES.length],
+        phrase: `¡Hola! Soy ${FIFTY_BOT_NAMES[idx]} (${elo} ELO). ¡Demuestra tu nivel!`
+      };
+    });
+
+    const BOTS_CONFIG = {
+      200:  { name: 'Bot "El Despistado"', avatar: '🤪', phrases: ['¡Ajá! Moví una ficha al azar.', '¿Esa pieza era importante?', '200 ELO de pura imprevisibilidad.'] },
+      500:  { name: 'Bot "El Principiante"', avatar: '🤓', phrases: ['¡Vi una pieza sin defender!', 'Practicando aperturas clásicas.', '¡Cuidado con mis diagonales!'] },
+      800:  { name: 'Bot "El Táctico"', avatar: '🧐', phrases: ['Analizando el centro del tablero...', 'Buscando un ataque doble.', 'No te regalaré piezas fácil.'] },
+      1000: { name: 'Bot "El Maestro"', avatar: '🔥', phrases: ['Calculando variantes...', 'Un descuido aquí y te castigo.', 'Dominando las columnas abiertas.'] },
+      2400: { name: 'Copito', avatar: '🕊️', displayElo: '1 ELO', phrases: ['Pío pío... solo soy una inocente torcaza...', 'Pío... he calculado millones de variantes.', 'No hay escape en este tablero.'] },
+      3000: { name: 'Copito el Gran Maestro', avatar: '👑', displayElo: '0 ELO', phrases: ['Pío pío... ¿listo para la revancha? Ahora juego en serio.', 'Soy el Rey del ajedrez.', '3000 ELO de pura perfección.'] }
+    };
+
+    const PIECE_VALUES = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
+    const PIECE_UNICODE = {
+      w: { p: '♙', r: '♖', n: '♘', b: '♗', q: '♕', k: '♔' },
+      b: { p: '♟', r: '♜', n: '♞', b: '♝', q: '♛', k: '♚' }
+    };
+
+    // Estado persistente en la nube
     let selectedBoardTheme = 'classic';
     let selectedPieceTheme = 'classic';
+    let selectedCoachId = 'stockfish_mentor';
+    let soundEnabled = true;
+    let estimatedPlayerElo = 600;
+    let tournamentTitles = []; // ej: ['SUB1 Tournament Winner', 'SUB2 Tournament Winner', 'SUB3 Tournament Winner']
 
     let userProfile = {
       username: 'Invitado',
@@ -716,12 +817,155 @@
       bio: 'Listo para derrotar a Copito en el tablero.'
     };
 
-    const AVATAR_OPTIONS = [
-      '😎', '♞', '👑', '🔥', '🧠', '🦅', '🐉', '🤖', '🦊', '⚡',
-      '🐺', '🦁', '🦉', '🦄', '🐼', '🐯', '⚔️', '🛡️', '🎯', '💎',
-      '🚀', '🌙', '☀️', '🍀', '🎭', '👾', '🎩', '🏆', '🌪️', '❄️'
-    ];
+    // Estado de partida
+    let gameMode = 'bot'; // 'bot' | 'online_random' | 'tournament' | 'local'
+    let isOnlineMatch = false;
+    let currentBotElo = 200;
+    let customBotProfile = null;
+    let board = [];
+    let turn = 'w';
+    let selectedSq = null;
+    let legalMovesForSelected = [];
+    let lastMove = null;
+    let lastMoveBadge = null;
+    let enPassantTarget = null;
+    let castlingRights = { wK: true, wQ: true, bK: true, bQ: true };
+    let moveHistoryList = [];
+    let capturedWhite = [];
+    let capturedBlack = [];
+    let isGameOver = false;
+    let pendingPromotion = null;
+    let botTimeout = null;
+    let draggedFrom = null;
+    let arrows = [];
+    let rightDragStart = null;
+    let currentBotFilter = 'all';
+    let matchmakingTimer = null;
+    let pendingRandomRival = null;
 
+    // Estado de torneo
+    let tournamentState = null;
+    let tournamentWaitTimer = null;
+
+    /* ========================================================================
+       GUARDADO EN LA NUBE (SIMULACIÓN CON RESPALDO LOCAL + SINCRONIZACIÓN)
+       ======================================================================== */
+    function setCloudStatus(text, isError = false) {
+      const el = document.getElementById('cloudSyncStatus');
+      if (!el) return;
+      el.innerText = text;
+      el.className = `text-[11px] font-bold px-1 ${isError ? 'text-rose-400' : 'text-emerald-400'}`;
+    }
+
+    function saveToCloud() {
+      try {
+        const snapshot = {
+          version: 2,
+          savedAt: new Date().toISOString(),
+          userProfile,
+          selectedBoardTheme,
+          selectedPieceTheme,
+          selectedCoachId,
+          estimatedPlayerElo,
+          tournamentTitles
+        };
+        const serialized = JSON.stringify(snapshot);
+        localStorage.setItem('leftchess_cloud_v2_primary', serialized);
+        sessionStorage.setItem('leftchess_cloud_v2_backup', serialized);
+        setCloudStatus('☁️ Nube guardada (' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ')');
+      } catch (err) {
+        setCloudStatus('⚠️ Error al sincronizar nube', true);
+      }
+    }
+
+    function loadFromCloud() {
+      try {
+        const raw = localStorage.getItem('leftchess_cloud_v2_primary') || sessionStorage.getItem('leftchess_cloud_v2_backup');
+        if (!raw) {
+          setCloudStatus('☁️ Nube lista (nuevo perfil)');
+          return;
+        }
+        const data = JSON.parse(raw);
+        if (data.userProfile) userProfile = { ...userProfile, ...data.userProfile };
+        if (data.selectedBoardTheme && BOARD_THEMES[data.selectedBoardTheme]) selectedBoardTheme = data.selectedBoardTheme;
+        if (data.selectedPieceTheme && PIECE_THEMES[data.selectedPieceTheme]) selectedPieceTheme = data.selectedPieceTheme;
+        if (data.selectedCoachId && (data.selectedCoachId === 'none' || COACH_PROFILES[data.selectedCoachId])) {
+          selectedCoachId = data.selectedCoachId;
+        }
+        if (typeof data.estimatedPlayerElo === 'number') estimatedPlayerElo = data.estimatedPlayerElo;
+        if (Array.isArray(data.tournamentTitles)) tournamentTitles = data.tournamentTitles;
+        setCloudStatus('☁️ Nube restaurada correctamente');
+      } catch (err) {
+        setCloudStatus('⚠️ Nube no disponible', true);
+      }
+    }
+
+    /* ========================================================================
+       SONIDOS ORGÁNICOS DE TABLERO
+       ======================================================================== */
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function playWoodTap(pitch = 165, duration = 0.06, volume = 0.25) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new AudioContextClass();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(pitch, now);
+        osc.frequency.exponentialRampToValueAtTime(pitch * 0.45, now + duration);
+        gain.gain.setValueAtTime(volume, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + duration);
+      } catch (e) {}
+    }
+
+    function playSound(type) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new AudioContextClass();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        if (type === 'move') playWoodTap(165, 0.06, 0.25);
+        else if (type === 'capture') {
+          playWoodTap(130, 0.08, 0.32);
+          setTimeout(() => playWoodTap(210, 0.045, 0.14), 30);
+        } else if (type === 'brilliant') {
+          playWoodTap(190, 0.06, 0.2);
+          [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.075);
+            gain.gain.setValueAtTime(0.13, now + idx * 0.075);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.075 + 0.3);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.075);
+            osc.stop(now + idx * 0.075 + 0.32);
+          });
+        } else if (type === 'check') {
+          playWoodTap(220, 0.06, 0.22);
+        } else if (type === 'gameover') {
+          playWoodTap(150, 0.08, 0.22);
+        }
+      } catch (e) {}
+    }
+
+    window.toggleSound = function () {
+      soundEnabled = !soundEnabled;
+      document.getElementById('menuSoundBtn').innerText = soundEnabled ? '🔊 Sonido: ON' : '🔇 Sonido: OFF';
+    };
+
+    /* ========================================================================
+       PIEZAS SVG, PERFIL, CORONAS DE CAMPEÓN Y TEMAS
+       ======================================================================== */
     function getPieceSVG(color, type, themeKey = selectedPieceTheme) {
       const th = PIECE_THEMES[themeKey] || PIECE_THEMES.classic;
       const isWhite = color === 'w';
@@ -731,47 +975,35 @@
 
       const paths = {
         p: `<path d="M22.5 9c-2.21 0-4 1.79-4 4 0 .89.29 1.71.78 2.38C17.33 16.5 16 18.59 16 21c0 2.03.94 3.84 2.41 5.03-3 1.06-7.41 5.55-7.41 13.47h23c0-7.92-4.41-12.41-7.41-13.47 1.47-1.19 2.41-3 2.41-5.03 0-2.41-1.33-4.5-3.28-5.62.49-.67.78-1.49.78-2.38 0-2.21-1.79-4-4-4z" fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round"/>`,
-        r: `<g fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 39h27v-3H9v3zM12 36v-4h21v4H12zM11 14V9h4v2h5V9h5v2h5V9h4v5"/>
-              <path d="M34 14l-3 3H14l-3-3"/>
-              <path d="M31 17v12.5H14V17"/>
-              <path d="M31 29.5l1.5 2.5h-20l1.5-2.5"/>
-              <path d="M11 14h23" fill="none" stroke="${detail}" stroke-width="1.4"/>
-            </g>`,
-        n: `<g fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 10c10.5 1 16.5 8 16 29H15c0-9 10-6.5 8-21"/>
-              <path d="M24 18c.38 2.91-5.55 7.37-8 9-3 2-2.82 4.34-5 4-1.042-.94 1.41-3.04 0-3-1 0 .19 1.23-1 2-1 0-4.003 1-4-4 0-2 6-12 6-12s1.89-1.9 2-3.5c-.73-.994-.5-2-.5-3 1-1 3 2.5 3 2.5h2s.78-1.992 2.5-3c1 0 1 3 1 3"/>
-              <circle cx="15" cy="14.5" r="1" fill="${detail}" stroke="none"/>
-            </g>`,
-        b: `<g fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 36c3.39-.97 10.11.43 13.5-2 3.39 2.43 10.11 1.03 13.5 2 0 0 1.65.54 3 2-.68.97-1.65.99-3 .5-3.39-.97-10.11.46-13.5-1-3.39 1.46-10.11.03-13.5 1-1.354.49-2.323.47-3-.5 1.354-1.94 3-2 3-2z"/>
-              <path d="M15 32c2.5 2.5 12.5 2.5 15 0 .5-1.5 0-2 0-2 0-2.5-2.5-4-2.5-4 5.5-1.5 6-11.5-5-15.5-11 4-10.5 14-5 15.5 0 0-2.5 1.5-2.5 4 0 0-.5.5 0 2z"/>
-              <circle cx="22.5" cy="8" r="2.2"/>
-              <path d="M17.5 26h10M15 30h15M22.5 15.5v5M20 18h5" fill="none" stroke="${detail}" stroke-width="1.6"/>
-            </g>`,
-        q: `<g fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="6" cy="12" r="2"/><circle cx="14" cy="9" r="2"/><circle cx="22.5" cy="8" r="2"/><circle cx="31" cy="9" r="2"/><circle cx="39" cy="12" r="2"/>
-              <path d="M9 26c8.5-1.5 21-1.5 27 0l2-12-7 11V11l-5.5 13.5-3-15-3 15-5.5-14V25L7 14l2 12z"/>
-              <path d="M9 26c0 2 1.5 2 2.5 4 1 1.5 1 1 .5 3.5-1.5 1-1.5 2.5-1.5 2.5-1.5 1.5.5 2.5.5 2.5 6.5 1 16.5 1 23 0 0 0 1.5-1 0-2.5 0 0 .5-1.5-1-2.5-.5-2.5-.5-2 .5-3.5 1-2 2.5-2 2.5-4-8.5-1.5-18.5-1.5-27 0z"/>
-              <path d="M11.5 30c3.5-1 18.5-1 22 0M12 33.5c6-1 15-1 21 0" fill="none" stroke="${detail}" stroke-width="1.4"/>
-            </g>`,
-        k: `<g fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22.5 11.63V6M20 8h5" fill="none" stroke="${stroke}" stroke-width="2"/>
-              <path d="M22.5 25s4.5-7.5 3-10.5c0 0-1-2.5-3-2.5s-3 2.5-3 2.5c-1.5 3 3 10.5 3 10.5"/>
-              <path d="M11.5 37c5.5 3.5 15.5 3.5 21 0v-7s9-4.5 6-10.5c-4-6.5-13.5-3.5-16 4V27v-3.5c-3.5-7.5-13-10.5-16-4-3 6 5 10 5 10V37z"/>
-              <path d="M11.5 30c5.5-3 15.5-3 21 0M11.5 33.5c5.5-3 15.5-3 21 0M11.5 37c5.5-3 15.5-3 21 0" fill="none" stroke="${detail}" stroke-width="1.4"/>
-            </g>`
+        r: `<g fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 39h27v-3H9v3zM12 36v-4h21v4H12zM11 14V9h4v2h5V9h5v2h5V9h4v5"/><path d="M34 14l-3 3H14l-3-3"/><path d="M31 17v12.5H14V17"/><path d="M31 29.5l1.5 2.5h-20l1.5-2.5"/><path d="M11 14h23" fill="none" stroke="${detail}" stroke-width="1.4"/></g>`,
+        n: `<g fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10c10.5 1 16.5 8 16 29H15c0-9 10-6.5 8-21"/><path d="M24 18c.38 2.91-5.55 7.37-8 9-3 2-2.82 4.34-5 4-1.042-.94 1.41-3.04 0-3-1 0 .19 1.23-1 2-1 0-4.003 1-4-4 0-2 6-12 6-12s1.89-1.9 2-3.5c-.73-.994-.5-2-.5-3 1-1 3 2.5 3 2.5h2s.78-1.992 2.5-3c1 0 1 3 1 3"/><circle cx="15" cy="14.5" r="1" fill="${detail}" stroke="none"/></g>`,
+        b: `<g fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 36c3.39-.97 10.11.43 13.5-2 3.39 2.43 10.11 1.03 13.5 2 0 0 1.65.54 3 2-.68.97-1.65.99-3 .5-3.39-.97-10.11.46-13.5-1-3.39 1.46-10.11.03-13.5 1-1.354.49-2.323.47-3-.5 1.354-1.94 3-2 3-2z"/><path d="M15 32c2.5 2.5 12.5 2.5 15 0 .5-1.5 0-2 0-2 0-2.5-2.5-4-2.5-4 5.5-1.5 6-11.5-5-15.5-11 4-10.5 14-5 15.5 0 0-2.5 1.5-2.5 4 0 0-.5.5 0 2z"/><circle cx="22.5" cy="8" r="2.2"/><path d="M17.5 26h10M15 30h15M22.5 15.5v5M20 18h5" fill="none" stroke="${detail}" stroke-width="1.6"/></g>`,
+        q: `<g fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2"/><circle cx="14" cy="9" r="2"/><circle cx="22.5" cy="8" r="2"/><circle cx="31" cy="9" r="2"/><circle cx="39" cy="12" r="2"/><path d="M9 26c8.5-1.5 21-1.5 27 0l2-12-7 11V11l-5.5 13.5-3-15-3 15-5.5-14V25L7 14l2 12z"/><path d="M9 26c0 2 1.5 2 2.5 4 1 1.5 1 1 .5 3.5-1.5 1-1.5 2.5-1.5 2.5-1.5 1.5.5 2.5.5 2.5 6.5 1 16.5 1 23 0 0 0 1.5-1 0-2.5 0 0 .5-1.5-1-2.5-.5-2.5-.5-2 .5-3.5 1-2 2.5-2 2.5-4-8.5-1.5-18.5-1.5-27 0z"/><path d="M11.5 30c3.5-1 18.5-1 22 0M12 33.5c6-1 15-1 21 0" fill="none" stroke="${detail}" stroke-width="1.4"/></g>`,
+        k: `<g fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.5 11.63V6M20 8h5" fill="none" stroke="${stroke}" stroke-width="2"/><path d="M22.5 25s4.5-7.5 3-10.5c0 0-1-2.5-3-2.5s-3 2.5-3 2.5c-1.5 3 3 10.5 3 10.5"/><path d="M11.5 37c5.5 3.5 15.5 3.5 21 0v-7s9-4.5 6-10.5c-4-6.5-13.5-3.5-16 4V27v-3.5c-3.5-7.5-13-10.5-16-4-3 6 5 10 5 10V37z"/><path d="M11.5 30c5.5-3 15.5-3 21 0M11.5 33.5c5.5-3 15.5-3 21 0M11.5 37c5.5-3 15.5-3 21 0" fill="none" stroke="${detail}" stroke-width="1.4"/></g>`
       };
 
       return `<svg viewBox="0 0 45 45" class="piece-svg">${paths[type]}</svg>`;
     }
 
-    /* ========================================================================
-       3. GESTIÓN DE INTERFAZ CHESS.COM (PESTAÑAS, CUENTA Y TEMAS)
-       ======================================================================== */
+    function renderCrownBadgesHTML() {
+      if (!tournamentTitles.length) return '';
+      return tournamentTitles.map(title =>
+        `<span class="inline-flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/50">👑 ${title}</span>`
+      ).join('');
+    }
+
+    function syncProfileUI() {
+      document.getElementById('sidebarAvatar').innerText = userProfile.avatar;
+      document.getElementById('sidebarUsername').innerText = userProfile.username;
+      document.getElementById('sidebarFlag').innerText = userProfile.flag;
+      document.getElementById('sidebarBio').innerText = `"${userProfile.bio}"`;
+      document.getElementById('sidebarElo').innerText = `ELO: ${estimatedPlayerElo} • Editar perfil`;
+      document.getElementById('sidebarTitles').innerHTML = renderCrownBadgesHTML();
+      document.getElementById('whiteCrownBadges').innerHTML = renderCrownBadgesHTML();
+    }
+
     window.switchMenuTab = function (tab) {
-      const tabs = ['play', 'profile', 'customize'];
-      tabs.forEach(t => {
+      ['play', 'pool', 'profile', 'customize'].forEach(t => {
         const panel = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
         const btn = document.getElementById('navBtn' + t.charAt(0).toUpperCase() + t.slice(1));
         if (t === tab) {
@@ -783,22 +1015,21 @@
         }
       });
 
-      if (tab === 'customize' || tab === 'play') {
-        renderCustomizationPreviews();
-      }
+      if (tab === 'pool') window.renderBotsList();
+      if (tab === 'customize' || tab === 'play') renderCustomizationPreviews();
     };
 
     function initProfileAndStudioUI() {
-      // Avatares
       const avatarContainer = document.getElementById('avatarPicker');
       avatarContainer.innerHTML = '';
       AVATAR_OPTIONS.forEach(av => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = `w-11 h-11 rounded-xl text-xl flex items-center justify-center border transition ${userProfile.avatar === av ? 'bg-[#739552] border-[#95cc5e]' : 'bg-[#23272f] border-gray-700 hover:border-gray-500'}`;
+        btn.className = `w-10 h-10 rounded-xl text-lg flex items-center justify-center border ${userProfile.avatar === av ? 'bg-[#739552] border-[#95cc5e]' : 'bg-[#23272f] border-gray-700'}`;
         btn.innerText = av;
         btn.onclick = () => {
           userProfile.avatar = av;
+          saveToCloud();
           initProfileAndStudioUI();
           syncProfileUI();
         };
@@ -807,51 +1038,36 @@
 
       document.getElementById('inputUsername').value = userProfile.username;
       document.getElementById('inputBio').value = userProfile.bio;
+      document.getElementById('coachSelect').value = selectedCoachId;
 
-      // Temas de tablero
       const boardGrid = document.getElementById('boardThemeGrid');
       boardGrid.innerHTML = '';
       Object.entries(BOARD_THEMES).forEach(([key, theme]) => {
         const active = selectedBoardTheme === key;
         const card = document.createElement('button');
         card.type = 'button';
-        card.className = `p-2.5 rounded-xl border text-left transition flex items-center gap-2.5 ${active ? 'bg-[#739552]/25 border-[#81b64c]' : 'bg-[#16181c] border-gray-800 hover:border-gray-600'}`;
-        card.innerHTML = `
-          <div class="w-8 h-8 rounded-lg overflow-hidden grid grid-cols-2 grid-rows-2 shrink-0 border border-black/40">
-            <div style="background:${theme.light}"></div>
-            <div style="background:${theme.dark}"></div>
-            <div style="background:${theme.dark}"></div>
-            <div style="background:${theme.light}"></div>
-          </div>
-          <div class="text-xs font-bold text-white leading-tight">${theme.name}</div>
-        `;
+        card.className = `p-2.5 rounded-xl border text-left flex items-center gap-2 ${active ? 'bg-[#739552]/25 border-[#81b64c]' : 'bg-[#16181c] border-gray-800'}`;
+        card.innerHTML = `<div class="w-6 h-6 rounded" style="background:${theme.dark}"></div><span class="text-xs font-bold text-white">${theme.name}</span>`;
         card.onclick = () => {
           selectedBoardTheme = key;
-          applyThemeVariables();
+          saveToCloud();
           initProfileAndStudioUI();
           renderCustomizationPreviews();
         };
         boardGrid.appendChild(card);
       });
 
-      // Estilos de fichas
       const pieceGrid = document.getElementById('pieceThemeGrid');
       pieceGrid.innerHTML = '';
       Object.entries(PIECE_THEMES).forEach(([key, pTheme]) => {
         const active = selectedPieceTheme === key;
         const card = document.createElement('button');
         card.type = 'button';
-        card.className = `p-3 rounded-xl border text-left transition flex items-center gap-3 ${active ? 'bg-[#739552]/25 border-[#81b64c]' : 'bg-[#16181c] border-gray-800 hover:border-gray-600'}`;
-        card.innerHTML = `
-          <div class="w-10 h-10 shrink-0">${getPieceSVG('w', 'n', key)}</div>
-          <div class="w-10 h-10 shrink-0">${getPieceSVG('b', 'q', key)}</div>
-          <div>
-            <div class="text-xs font-bold text-white">${pTheme.name}</div>
-            <div class="text-[11px] text-gray-400">${pTheme.desc}</div>
-          </div>
-        `;
+        card.className = `p-2.5 rounded-xl border text-left flex items-center gap-2 ${active ? 'bg-[#739552]/25 border-[#81b64c]' : 'bg-[#16181c] border-gray-800'}`;
+        card.innerHTML = `<div class="w-8 h-8">${getPieceSVG('w', 'n', key)}</div><div><div class="text-xs font-bold text-white">${pTheme.name}</div><div class="text-[11px] text-gray-400">${pTheme.desc}</div></div>`;
         card.onclick = () => {
           selectedPieceTheme = key;
+          saveToCloud();
           initProfileAndStudioUI();
           renderCustomizationPreviews();
         };
@@ -860,29 +1076,17 @@
     }
 
     window.saveProfile = function () {
-      const rawName = document.getElementById('inputUsername').value.trim();
-      const countryVal = document.getElementById('inputCountry').value.split('|');
-      const rawBio = document.getElementById('inputBio').value.trim();
-
-      userProfile.username = rawName || 'Invitado';
-      userProfile.flag = countryVal[0] || '🇨🇴';
-      userProfile.countryName = countryVal[1] || 'Colombia';
-      userProfile.bio = rawBio || 'Listo para derrotar a Copito en el tablero.';
-
+      userProfile.username = (document.getElementById('inputUsername').value || '').trim() || 'Invitado';
+      const cVal = document.getElementById('inputCountry').value.split('|');
+      userProfile.flag = cVal[0] || '🇨🇴';
+      userProfile.countryName = cVal[1] || 'Colombia';
+      userProfile.bio = (document.getElementById('inputBio').value || '').trim() || 'Listo para jugar.';
+      saveToCloud();
       syncProfileUI();
-
       const toast = document.getElementById('profileSavedToast');
       toast.classList.remove('opacity-0');
       setTimeout(() => toast.classList.add('opacity-0'), 2200);
     };
-
-    function syncProfileUI() {
-      document.getElementById('sidebarAvatar').innerText = userProfile.avatar;
-      document.getElementById('sidebarUsername').innerText = userProfile.username;
-      document.getElementById('sidebarFlag').innerText = userProfile.flag;
-      document.getElementById('sidebarBio').innerText = `"${userProfile.bio}"`;
-      document.getElementById('sidebarElo').innerText = `ELO: ${estimatedPlayerElo} • Editar perfil`;
-    }
 
     function applyThemeVariables() {
       const bTheme = BOARD_THEMES[selectedBoardTheme] || BOARD_THEMES.classic;
@@ -898,20 +1102,15 @@
       el.innerHTML = '';
       const bTheme = BOARD_THEMES[selectedBoardTheme] || BOARD_THEMES.classic;
       const backRow = ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'];
-
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
           const sq = document.createElement('div');
           sq.className = 'flex items-center justify-center p-0.5';
           sq.style.backgroundColor = (r + c) % 2 === 0 ? bTheme.light : bTheme.dark;
-
-          let pieceHtml = '';
-          if (r === 0) pieceHtml = getPieceSVG('b', backRow[c]);
-          else if (r === 1) pieceHtml = getPieceSVG('b', 'p');
-          else if (r === 6) pieceHtml = getPieceSVG('w', 'p');
-          else if (r === 7) pieceHtml = getPieceSVG('w', backRow[c]);
-
-          if (pieceHtml) sq.innerHTML = pieceHtml;
+          if (r === 0) sq.innerHTML = getPieceSVG('b', backRow[c]);
+          else if (r === 1) sq.innerHTML = getPieceSVG('b', 'p');
+          else if (r === 6) sq.innerHTML = getPieceSVG('w', 'p');
+          else if (r === 7) sq.innerHTML = getPieceSVG('w', backRow[c]);
           el.appendChild(sq);
         }
       }
@@ -924,165 +1123,131 @@
     }
 
     /* ========================================================================
-       4. ESTADO DEL JUEGO, BOTS HASTA 1000 ELO Y FLECHAS
+       ENTRENADORES INTELIGENTES (SOLO FUERA DE PARTIDAS ONLINE)
        ======================================================================== */
-    let soundEnabled = true;
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    let audioCtx = null;
+    window.setSelectedCoach = function (coachId) {
+      selectedCoachId = coachId;
+      saveToCloud();
+      syncCoachPanel();
+    };
 
-    // Sonidos orgánicos tipo ficha de madera/fieltro en ajedrez (menos sintéticos)
-    function playWoodTap(pitch = 165, duration = 0.065, volume = 0.28) {
-      if (!audioCtx) audioCtx = new AudioContextClass();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const now = audioCtx.currentTime;
-
-      // Golpe grave corto de madera
-      const bodyOsc = audioCtx.createOscillator();
-      const bodyGain = audioCtx.createGain();
-      bodyOsc.type = 'sine';
-      bodyOsc.frequency.setValueAtTime(pitch, now);
-      bodyOsc.frequency.exponentialRampToValueAtTime(pitch * 0.45, now + duration);
-      bodyGain.gain.setValueAtTime(volume, now);
-      bodyGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-      bodyOsc.connect(bodyGain);
-      bodyGain.connect(audioCtx.destination);
-      bodyOsc.start(now);
-      bodyOsc.stop(now + duration);
-
-      // Pequeño click seco filtrado (como golpe sobre tablero de madera)
-      const bufSize = Math.floor(audioCtx.sampleRate * 0.025);
-      const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-      const data = buf.getChannelData(0);
-      for (let i = 0; i < bufSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufSize * 0.35));
+    function syncCoachPanel() {
+      const sidebar = document.getElementById('coachSidebar');
+      if (isOnlineMatch || selectedCoachId === 'none') {
+        sidebar.classList.add('hidden');
+        return;
       }
-      const noise = audioCtx.createBufferSource();
-      noise.buffer = buf;
-
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(pitch * 5.5, now);
-      filter.Q.setValueAtTime(2.2, now);
-
-      const nGain = audioCtx.createGain();
-      nGain.gain.setValueAtTime(volume * 0.55, now);
-      nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
-
-      noise.connect(filter);
-      filter.connect(nGain);
-      nGain.connect(audioCtx.destination);
-      noise.start(now);
-    }
-
-    function playSound(type) {
-      if (!soundEnabled) return;
-      try {
-        if (!audioCtx) audioCtx = new AudioContextClass();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const now = audioCtx.currentTime;
-
-        if (type === 'move') {
-          playWoodTap(165, 0.06, 0.28);
-        } else if (type === 'capture') {
-          playWoodTap(130, 0.085, 0.36);
-          setTimeout(() => playWoodTap(210, 0.045, 0.16), 30);
-        } else if (type === 'brilliant') {
-          playWoodTap(190, 0.06, 0.22);
-          [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, now + idx * 0.075);
-            gain.gain.setValueAtTime(0.14, now + idx * 0.075);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.075 + 0.32);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(now + idx * 0.075);
-            osc.stop(now + idx * 0.075 + 0.34);
-          });
-        } else if (type === 'check') {
-          playWoodTap(220, 0.06, 0.25);
-          [440, 554.37].forEach((freq, idx) => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, now + idx * 0.07);
-            gain.gain.setValueAtTime(0.14, now + idx * 0.07);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.18);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(now + idx * 0.07);
-            osc.stop(now + idx * 0.07 + 0.2);
-          });
-        } else if (type === 'castle') {
-          playWoodTap(160, 0.06, 0.25);
-          setTimeout(() => playWoodTap(185, 0.065, 0.25), 95);
-        } else if (type === 'gameover') {
-          playWoodTap(150, 0.08, 0.25);
-          [392.0, 493.88, 587.33].forEach((freq, idx) => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, now + idx * 0.13);
-            gain.gain.setValueAtTime(0.15, now + idx * 0.13);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.13 + 0.4);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(now + idx * 0.13);
-            osc.stop(now + idx * 0.13 + 0.42);
-          });
-        }
-      } catch (e) {
-        // Ignorar si el navegador bloquea el audio antes de interacción
+      sidebar.classList.remove('hidden');
+      const coach = COACH_PROFILES[selectedCoachId] || COACH_PROFILES.stockfish_mentor;
+      document.getElementById('coachAvatar').innerText = coach.avatar;
+      document.getElementById('coachName').innerText = coach.name;
+      document.getElementById('coachMeta').innerText = coach.meta;
+      if (moveHistoryList.length === 0) {
+        document.getElementById('coachTipText').innerText = coach.openingTip;
+        document.getElementById('coachPlanText').innerText = coach.tacticPlan;
       }
     }
 
-    window.toggleSound = function () {
-      soundEnabled = !soundEnabled;
-      document.getElementById('menuSoundBtn').innerText = soundEnabled ? '🔊 Sonido: ON' : '🔇 Sonido: OFF';
-      document.getElementById('gameSoundBtn').innerText = soundEnabled ? '🔊 Sonido: ON' : '🔇 Sonido: OFF';
+    function updateCoachLiveAdvice() {
+      if (isOnlineMatch || selectedCoachId === 'none') return;
+      const coach = COACH_PROFILES[selectedCoachId] || COACH_PROFILES.stockfish_mentor;
+      const whiteMoves = getAllLegalMoves('w');
+      const captureMoves = whiteMoves.filter(m => board[m.toR][m.toC]);
+      const checkMoves = whiteMoves.filter(m => isKingInCheck(applyMoveToBoard(board, m), 'b'));
+
+      if (checkMoves.length > 0) {
+        const cm = checkMoves[0];
+        const files = ['a','b','c','d','e','f','g','h'];
+        document.getElementById('coachTipText').innerText = `¡Tienes jaque disponible con ${files[cm.fromC]}${8 - cm.fromR} → ${files[cm.toC]}${8 - cm.toR}!`;
+        document.getElementById('coachPlanText').innerText = 'Evalúa si el jaque gana material o fuerza una mala respuesta.';
+      } else if (captureMoves.length > 0) {
+        captureMoves.sort((a, b) => (PIECE_VALUES[board[b.toR][b.toC]?.type] || 0) - (PIECE_VALUES[board[a.toR][a.toC]?.type] || 0));
+        const bestCap = captureMoves[0];
+        const files = ['a','b','c','d','e','f','g','h'];
+        const targetType = board[bestCap.toR][bestCap.toC].type;
+        document.getElementById('coachTipText').innerText = `${coach.name} detecta captura de valor (${targetType.toUpperCase()}) en ${files[bestCap.toC]}${8 - bestCap.toR}.`;
+        document.getElementById('coachPlanText').innerText = 'Verifica que la casilla destino quede protegida tras capturar.';
+      } else {
+        document.getElementById('coachTipText').innerText = coach.openingTip;
+        document.getElementById('coachPlanText').innerText = coach.tacticPlan;
+      }
+    }
+
+    window.suggestCoachMove = function () {
+      if (isOnlineMatch || isGameOver || turn !== 'w') return;
+      const moves = getAllLegalMoves('w');
+      if (!moves.length) return;
+      const pick = moves.find(m => board[m.toR][m.toC]) || moves[Math.floor(Math.random() * moves.length)];
+      arrows = [{ fromR: pick.fromR, fromC: pick.fromC, toR: pick.toR, toC: pick.toC, color: 'rgba(99, 102, 241, 0.88)' }];
+      renderArrows();
+      const files = ['a','b','c','d','e','f','g','h'];
+      document.getElementById('coachPlanText').innerText = `Sugerencia marcada: ${files[pick.fromC]}${8 - pick.fromR} → ${files[pick.toC]}${8 - pick.toR}.`;
     };
 
     /* ========================================================================
-       3. ESTADO DEL JUEGO, BOTS HASTA 1000 ELO Y FLECHAS
+       50 BOTS EXCLUSIVOS PARA ONLINE RANDOM (HASTA 3.000 ELO)
        ======================================================================== */
-    let gameMode = 'bot';
-    let currentBotElo = 200;
-    let board = [];
-    let turn = 'w';
-    let selectedSq = null;
-    let legalMovesForSelected = [];
-    let lastMove = null;
-    let lastMoveBadge = null; // { r, c, symbol }
-    let enPassantTarget = null;
-    let castlingRights = { wK: true, wQ: true, bK: true, bQ: true };
-    let moveHistoryList = [];
-    let capturedWhite = [];
-    let capturedBlack = [];
-    let isGameOver = false;
-    let pendingPromotion = null;
-    let botTimeout = null;
+    window.setBotFilter = function (filter) {
+      currentBotFilter = filter;
+      ['all', 'sub1', 'sub2', 'sub3', '3000'].forEach(f => {
+        const btn = document.getElementById('filter' + f.charAt(0).toUpperCase() + f.slice(1));
+        if (!btn) return;
+        btn.className = f === filter
+          ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-600 text-white'
+          : 'px-3 py-1.5 rounded-lg text-xs font-bold bg-[#23272f] text-gray-300';
+      });
+      window.renderBotsList();
+    };
 
-    // Medidor de ELO del jugador en vivo
-    let estimatedPlayerElo = 600;
-    let customBotProfile = null;
-    let matchmakingTimer = null;
-    let pendingRandomRival = null;
+    window.renderBotsList = function () {
+      const container = document.getElementById('botsListContainer');
+      if (!container) return;
+      const q = (document.getElementById('botSearchInput')?.value || '').trim().toLowerCase();
 
-    const RANDOM_ONLINE_POOL = [
-      { name: 'Mateo_Cali', avatar: '🐺', flag: '🇨🇴', elo: 450, style: 'Casual', phrase: '¡Buenas! A ver cómo sale esta partida.' },
-      { name: 'SofiChess', avatar: '🦊', flag: '🇲🇽', elo: 650, style: 'Ofensiva', phrase: 'Me gusta atacar rápido por el flanco.' },
-      { name: 'ToroBlanco', avatar: '🦁', flag: '🇦🇷', elo: 850, style: 'Táctico', phrase: 'Cuidado con los caballos, bro.' },
-      { name: 'Valen_GM', avatar: '🦉', flag: '🇪🇸', elo: 1000, style: 'Posicional', phrase: 'Controlando el centro y sumando ventaja.' },
-      { name: 'AndresBlitz', avatar: '⚡', flag: '🇨🇱', elo: 750, style: 'Rápido', phrase: '¡A mover fichas sin miedo!' },
-      { name: 'LuciaQueen', avatar: '👑', flag: '🇵🇪', elo: 950, style: 'Calculador', phrase: 'Cada jugada cuenta aquí.' }
-    ];
+      const list = FIFTY_ONLINE_BOTS.filter(b => {
+        if (currentBotFilter === 'sub1' && !(b.elo >= 200 && b.elo <= 500)) return false;
+        if (currentBotFilter === 'sub2' && !(b.elo > 500 && b.elo <= 1000)) return false;
+        if (currentBotFilter === 'sub3' && !(b.elo > 1000 && b.elo < 3000)) return false;
+        if (currentBotFilter === '3000' && b.elo !== 3000) return false;
+        if (q && !`${b.id} ${b.name} ${b.elo} ${b.style}`.toLowerCase().includes(q)) return false;
+        return true;
+      });
 
-    window.openRandomMatchmaking = function () {
+      container.innerHTML = list.map(b => `
+        <div class="flex items-center justify-between p-2.5 bg-[#22262d] border border-gray-800 rounded-xl gap-2">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-xl shrink-0">${b.avatar}</span>
+            <div class="min-w-0">
+              <div class="font-bold text-xs text-white truncate">#${b.id} ${b.name}</div>
+              <div class="text-[11px] text-cyan-300 font-semibold">${b.displayElo} • ${b.style}</div>
+            </div>
+          </div>
+          <button type="button" onclick="window.openRandomMatchmaking(${b.id})" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500 text-cyan-200 hover:text-gray-950 text-[10px] font-black transition shrink-0">
+            Online ⚡
+          </button>
+        </div>
+      `).join('');
+    };
+
+    function makeOnlineRivalObject(bot) {
+      const flag = ONLINE_FLAGS[bot.id % ONLINE_FLAGS.length];
+      return {
+        botId: bot.id,
+        name: bot.name,
+        avatar: bot.avatar,
+        flag,
+        elo: bot.elo,
+        displayElo: bot.displayElo,
+        style: bot.style,
+        phrase: bot.phrase
+      };
+    }
+
+    window.openRandomMatchmaking = function (preferredBotId = null) {
       const modal = document.getElementById('matchmakingModal');
       document.getElementById('mmSpinner').classList.remove('hidden');
-      document.getElementById('mmTitle').innerText = 'Buscando rival en línea...';
-      document.getElementById('mmStatus').innerText = 'Conectando con jugadores disponibles...';
+      document.getElementById('mmTitle').innerText = 'Buscando rival online...';
+      document.getElementById('mmStatus').innerText = 'Emparejando entre 50 bots (200 a 3.000 ELO)...';
       document.getElementById('mmRivalCard').classList.add('hidden');
       document.getElementById('mmPlayBtn').classList.add('hidden');
       document.getElementById('mmCancelBtn').innerText = 'Cancelar';
@@ -1090,20 +1255,23 @@
 
       if (matchmakingTimer) clearTimeout(matchmakingTimer);
       matchmakingTimer = setTimeout(() => {
-        const rival = RANDOM_ONLINE_POOL[Math.floor(Math.random() * RANDOM_ONLINE_POOL.length)];
+        const bot = preferredBotId
+          ? (FIFTY_ONLINE_BOTS.find(x => x.id === preferredBotId) || FIFTY_ONLINE_BOTS[0])
+          : FIFTY_ONLINE_BOTS[Math.floor(Math.random() * FIFTY_ONLINE_BOTS.length)];
+        const rival = makeOnlineRivalObject(bot);
         pendingRandomRival = rival;
 
         document.getElementById('mmSpinner').classList.add('hidden');
-        document.getElementById('mmTitle').innerText = '¡Rival encontrado!';
-        document.getElementById('mmStatus').innerText = 'Sala lista para iniciar:';
+        document.getElementById('mmTitle').innerText = '¡Rival online encontrado!';
+        document.getElementById('mmStatus').innerText = 'Partida online sin entrenador:';
         document.getElementById('mmRivalAvatar').innerText = rival.avatar;
         document.getElementById('mmRivalName').innerText = rival.name;
         document.getElementById('mmRivalFlag').innerText = rival.flag;
-        document.getElementById('mmRivalMeta').innerText = `${rival.elo} ELO • Estilo ${rival.style}`;
+        document.getElementById('mmRivalMeta').innerText = `${rival.displayElo} • ${rival.style}`;
         document.getElementById('mmRivalCard').classList.remove('hidden');
         document.getElementById('mmPlayBtn').classList.remove('hidden');
         document.getElementById('mmCancelBtn').innerText = 'Buscar otro';
-      }, 1100);
+      }, 950);
     };
 
     window.closeMatchmaking = function () {
@@ -1118,145 +1286,251 @@
       customBotProfile = {
         name: `${rival.name} ${rival.flag}`,
         avatar: rival.avatar,
-        displayElo: `${rival.elo} ELO`,
-        phrases: [rival.phrase, 'Buena movida, déjame pensar...', '¡Interesante línea en el tablero!']
+        displayElo: rival.displayElo,
+        phrases: [rival.phrase, 'Buena jugada, calculando...', '¡A ver cómo respondes!']
       };
       document.getElementById('matchmakingModal').classList.add('hidden');
-      window.startGame('bot', rival.elo);
+      window.startGame('online_random', rival.elo);
     };
 
-    // Estado de Drag & Drop y Flechas Tácticas
-    let draggedFrom = null;
-    let arrows = []; // { fromR, fromC, toR, toC, color }
-    let rightDragStart = null;
+    /* ========================================================================
+       MODO TORNEO (SUB1 = 10, SUB2 = 20, SUB3 = 30 PARTIDAS)
+       ======================================================================== */
+    window.openTournamentLobbyPage = function () {
+      document.getElementById('mainMenu').classList.add('hidden');
+      document.getElementById('tournamentStandingsPage').classList.add('hidden');
+      document.getElementById('tournamentLobbyPage').classList.remove('hidden');
+    };
 
-    const BOTS_CONFIG = {
-      200: {
-        name: 'Bot "El Despistado"',
-        avatar: '🤪',
-        phrases: [
-          "¡Ajá! Moví una ficha al azar y creo que soy un genio.",
-          "Espera... ¿esa pieza era importante?",
-          "Mi estrategia de 200 ELO está más allá de tu comprensión.",
-          "¡Ups! Se me resbaló el dedo virtual.",
-          "Si saco el rey a pasear temprano, gana experiencia, ¿no?"
-        ]
-      },
-      500: {
-        name: 'Bot "El Principiante"',
-        avatar: '🤓',
-        phrases: [
-          "¡Vi una pieza sin defender y me la comí!",
-          "Estoy practicando mis aperturas de YouTube.",
-          "¡Cuidado con mi alfil, que dispara desde lejos!",
-          "Hmm, creo que dejé mi caballo en peligro..."
-        ]
-      },
-      800: {
-        name: 'Bot "El Táctico"',
-        avatar: '🧐',
-        phrases: [
-          "Analizando el centro del tablero...",
-          "Esa jugada tuya estuvo interesante, pero tengo respuesta.",
-          "Buscando un ataque doble con mi caballo.",
-          "No te voy a regalar piezas tan fácil."
-        ]
-      },
-      1000: {
-        name: 'Bot "El Maestro"',
-        avatar: '🔥',
-        displayElo: '1000 ELO',
-        phrases: [
-          "Calculando variantes a 2 jugadas de profundidad.",
-          "Un error táctico aquí y te castigo.",
-          "Buena presión, veamos cómo defiendes tu rey.",
-          "Dominando las columnas abiertas."
-        ]
-      },
-      2400: {
-        name: 'Copito',
-        avatar: '🕊️',
-        displayElo: '1 ELO',
-        phrases: [
-          "Pío pío... (Tu estructura de peones está condenada en 14 jugadas).",
-          "Pío... *mueve el pico* (He calculado 4 millones de variantes mientras picoteaba alpiste).",
-          "¿Creías que ese gambito funcionaría contra una torcaza?",
-          "Pío pío. No hay escape, humano. El centro me pertenece.",
-          "*Aletea suavemente* Magnus Carlsen me pide consejos en secreto.",
-          "Pío... Tu rey ya no tiene refugio en este tablero."
-        ]
-      },
-      3000: {
-        name: 'Copito el Gran Maestro',
-        avatar: '👑',
-        displayElo: '0 ELO',
-        phrases: [
-          "Pío pío... ¿listo para la revancha? Antes fue fácil porque no estaba jugando en serio, pero ahora SÍ.",
-          "Soy el Rey del ajedrez. Es imposible ganarme sin una estrategia perfecta.",
-          "Pío... *ajusta su corona* ¿Crees que puedes vencer al Rey del tablero? Qué tierno.",
-          "Calculo 3000 de ELO en cada aleteo. No tienes ninguna oportunidad sin un plan maestro.",
-          "Nadie puede destronarme cuando me pongo serio. Tus piezas caerán una por una.",
-          "Pío pío... Cada movimiento tuyo solo confirma mi supremacía absoluta."
-        ],
-        winningPhrases: [
-          "¡JAJAJA! Pío pío... ¡Soy el Rey invencible del ajedrez, mira esa ventaja aplastante!",
-          "¿Sientes el peso de mi corona? Es imposible derrotarme cuando juego en serio.",
-          "Pío... Tu ejército desaparece del tablero. ¡Arrodíllate ante el Rey!",
-          "¡3000 ELO de pura perfección! Nadie puede tocar mi trono."
-        ],
-        defeatPhrase: "¡¿QUÉ?! Pío... ¡Felicitaciones, has destronado al Rey jajaja, qué maldito experto eres!"
+    window.closeTournamentLobbyPage = function () {
+      if (tournamentWaitTimer) clearTimeout(tournamentWaitTimer);
+      document.getElementById('tournamentLobbyPage').classList.add('hidden');
+      document.getElementById('mainMenu').classList.remove('hidden');
+      syncProfileUI();
+    };
+
+    function getTournamentPool(code) {
+      if (code === 'SUB1') return FIFTY_ONLINE_BOTS.filter(b => b.elo <= 550);
+      if (code === 'SUB2') return FIFTY_ONLINE_BOTS.filter(b => b.elo > 500 && b.elo <= 1050);
+      return FIFTY_ONLINE_BOTS.filter(b => b.elo > 1000 && b.elo <= 3000);
+    }
+
+    function createTournamentBracket(code, totalMatches) {
+      const pool = getTournamentPool(code);
+      const shuffled = [...pool].sort(() => Math.random() - 0.5).slice(0, 7);
+      const competitors = [
+        {
+          id: 'player',
+          isPlayer: true,
+          name: `${userProfile.username} ${userProfile.flag}`,
+          avatar: userProfile.avatar,
+          elo: estimatedPlayerElo,
+          points: 0,
+          status: 'En espera'
+        },
+        ...shuffled.map((b, i) => ({
+          id: `bot_${b.id}`,
+          isPlayer: false,
+          botData: makeOnlineRivalObject(b),
+          name: `${b.name} ${ONLINE_FLAGS[b.id % ONLINE_FLAGS.length]}`,
+          avatar: b.avatar,
+          elo: b.elo,
+          points: 0,
+          status: i % 2 === 0 ? 'En partida' : 'En espera'
+        }))
+      ];
+
+      return {
+        code,
+        totalMatches,
+        completedMatches: 0,
+        waitingDone: false,
+        championWon: false,
+        competitors
+      };
+    }
+
+    window.enterTournamentWaitingRoom = function (code) {
+      const totalMatches = code === 'SUB1' ? 10 : code === 'SUB2' ? 20 : 30;
+      tournamentState = createTournamentBracket(code, totalMatches);
+      tournamentState.waitingDone = false;
+
+      document.getElementById('tournamentLobbyPage').classList.add('hidden');
+      document.getElementById('tournamentStandingsPage').classList.remove('hidden');
+      document.getElementById('championBanner').classList.add('hidden');
+      document.getElementById('tournamentWaitingBanner').classList.remove('hidden');
+      document.getElementById('waitingIcon').innerText = '⏳';
+      document.getElementById('waitingIcon').classList.add('animate-spin');
+      document.getElementById('waitingTitle').innerText = 'Esperando a que comience el torneo...';
+      document.getElementById('waitingDesc').innerText = `Sala ${code} (${totalMatches} partidas). Iniciando automáticamente en unos segundos...`;
+      document.getElementById('nextMatchGreenBtn').classList.add('opacity-50', 'pointer-events-none');
+
+      renderTournamentStandingsPage();
+
+      if (tournamentWaitTimer) clearTimeout(tournamentWaitTimer);
+      // Emparejamiento un poco más tardado antes de iniciar automáticamente
+      tournamentWaitTimer = setTimeout(() => {
+        if (!tournamentState) return;
+        tournamentState.waitingDone = true;
+        document.getElementById('waitingIcon').classList.remove('animate-spin');
+        document.getElementById('waitingIcon').innerText = '⚔️';
+        document.getElementById('waitingTitle').innerText = '¡Torneo iniciado! Entrando a tu primera partida...';
+        document.getElementById('waitingDesc').innerText = 'Preparando rival del bracket...';
+        renderTournamentStandingsPage();
+
+        setTimeout(() => {
+          if (tournamentState && !tournamentState.championWon) {
+            window.launchNextTournamentMatch();
+          }
+        }, 1200);
+      }, 2800);
+    };
+
+    function renderTournamentStandingsPage() {
+      if (!tournamentState) return;
+      const { code, totalMatches, completedMatches, championWon, competitors } = tournamentState;
+
+      document.getElementById('standingsTitle').innerText = `🏆 Tabla del Torneo ${code}`;
+      document.getElementById('standingsSubtitle').innerText =
+        `Partida ${Math.min(completedMatches + (championWon ? 0 : 1), totalMatches)} de ${totalMatches} • Clasificación en vivo`;
+
+      // Simular estados dinámicos de los bots entre rondas
+      competitors.forEach(c => {
+        if (c.isPlayer) {
+          c.status = championWon ? 'Campeón 👑' : (tournamentState.waitingDone ? 'Listo' : 'Esperando');
+        } else {
+          if (!tournamentState.waitingDone) {
+            c.status = 'Esperando';
+          } else {
+            const roll = Math.random();
+            c.status = roll < 0.5 ? 'En partida' : 'En espera';
+            if (completedMatches > 0 && roll < 0.45) {
+              c.points += Math.random() < 0.65 ? 3 : 1;
+            }
+          }
+        }
+      });
+
+      const sorted = [...competitors].sort((a, b) => b.points - a.points || b.elo - a.elo);
+      const rowsEl = document.getElementById('standingsRows');
+      rowsEl.innerHTML = sorted.map((c, idx) => {
+        const isPlayingStatus = c.status === 'En partida';
+        const statusBadge = isPlayingStatus
+          ? `<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold">⚔️ En partida</span>`
+          : `<span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 text-[10px] font-bold">${c.status}</span>`;
+
+        return `
+          <div class="grid grid-cols-12 items-center px-4 py-2.5 ${c.isPlayer ? 'bg-[#739552]/15 font-bold' : ''}">
+            <div class="col-span-1 text-gray-400 font-black">${idx + 1}</div>
+            <div class="col-span-5 flex items-center gap-2 min-w-0">
+              <span class="text-base">${c.avatar}</span>
+              <span class="truncate text-white">${c.name}</span>
+            </div>
+            <div class="col-span-2 text-center text-cyan-300 font-semibold">${c.elo}</div>
+            <div class="col-span-2 text-center">${statusBadge}</div>
+            <div class="col-span-2 text-right text-amber-300 font-black">${c.points} pts</div>
+          </div>
+        `;
+      }).join('');
+
+      const greenBtn = document.getElementById('nextMatchGreenBtn');
+      if (championWon) {
+        document.getElementById('tournamentWaitingBanner').classList.add('hidden');
+        document.getElementById('championBanner').classList.remove('hidden');
+        document.getElementById('championSubtext').innerText =
+          `¡Completaste las ${totalMatches} partidas de ${code} como líder! Título obtenido: 👑 ${code} Tournament Winner`;
+        greenBtn.innerText = 'Volver al Menú con tu Corona 👑';
+        greenBtn.classList.remove('opacity-50', 'pointer-events-none');
+      } else if (tournamentState.waitingDone) {
+        greenBtn.innerText = 'Siguiente partida ⚡';
+        greenBtn.classList.remove('opacity-50', 'pointer-events-none');
+      } else {
+        greenBtn.classList.add('opacity-50', 'pointer-events-none');
       }
+    }
+
+    window.launchNextTournamentMatch = function () {
+      if (!tournamentState) return;
+      if (tournamentState.championWon) {
+        tournamentState = null;
+        document.getElementById('tournamentStandingsPage').classList.add('hidden');
+        document.getElementById('mainMenu').classList.remove('hidden');
+        syncProfileUI();
+        return;
+      }
+
+      const pool = getTournamentPool(tournamentState.code);
+      const picked = pool[Math.floor(Math.random() * pool.length)] || FIFTY_ONLINE_BOTS[0];
+      const rival = makeOnlineRivalObject(picked);
+
+      customBotProfile = {
+        name: `${rival.name} ${rival.flag}`,
+        avatar: rival.avatar,
+        displayElo: rival.displayElo,
+        phrases: [`¡Torneo ${tournamentState.code} — Partida ${tournamentState.completedMatches + 1}/${tournamentState.totalMatches}!`, '¡A jugar por los puntos!']
+      };
+
+      document.getElementById('tournamentStandingsPage').classList.add('hidden');
+      window.startGame('tournament', rival.elo);
     };
 
-    const PIECE_VALUES = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
-
-    // Tablas posicionales de Gran Maestro para Copito (2400 ELO)
-    const PST_PAWN = [
-      [ 0,  0,  0,  0,  0,  0,  0,  0],
-      [50, 50, 50, 50, 50, 50, 50, 50],
-      [10, 10, 20, 30, 30, 20, 10, 10],
-      [ 5,  5, 10, 27, 27, 10,  5,  5],
-      [ 0,  0,  0, 25, 25,  0,  0,  0],
-      [ 5, -5,-10,  0,  0,-10, -5,  5],
-      [ 5, 10, 10,-22,-22, 10, 10,  5],
-      [ 0,  0,  0,  0,  0,  0,  0,  0]
-    ];
-    const PST_KNIGHT = [
-      [-50,-40,-30,-30,-30,-30,-40,-50],
-      [-40,-20,  0,  0,  0,  0,-20,-40],
-      [-30,  0, 12, 18, 18, 12,  0,-30],
-      [-30,  5, 18, 24, 24, 18,  5,-30],
-      [-30,  0, 18, 24, 24, 18,  0,-30],
-      [-30,  5, 12, 18, 18, 12,  5,-30],
-      [-40,-20,  0,  5,  5,  0,-20,-40],
-      [-50,-40,-30,-30,-30,-30,-40,-50]
-    ];
-    const PST_BISHOP = [
-      [-20,-10,-10,-10,-10,-10,-10,-20],
-      [-10,  0,  0,  0,  0,  0,  0,-10],
-      [-10,  0,  8, 12, 12,  8,  0,-10],
-      [-10,  6,  6, 12, 12,  6,  6,-10],
-      [-10,  0, 12, 12, 12, 12,  0,-10],
-      [-10, 12, 12, 12, 12, 12, 12,-10],
-      [-10,  6,  0,  0,  0,  0,  6,-10],
-      [-20,-10,-10,-10,-10,-10,-10,-20]
-    ];
-    const PIECE_UNICODE = {
-      w: { p: '♙', r: '♖', n: '♘', b: '♗', q: '♕', k: '♔' },
-      b: { p: '♟', r: '♜', n: '♞', b: '♝', q: '♛', k: '♚' }
+    window.returnFromMatchToStandings = function () {
+      if (!tournamentState) {
+        window.backToMenu();
+        return;
+      }
+      document.getElementById('gameScreen').classList.add('hidden');
+      document.getElementById('gameScreen').classList.remove('flex');
+      document.getElementById('tournamentStandingsPage').classList.remove('hidden');
+      renderTournamentStandingsPage();
     };
 
+    window.abandonTournamentToMenu = function () {
+      if (tournamentWaitTimer) clearTimeout(tournamentWaitTimer);
+      tournamentState = null;
+      document.getElementById('tournamentStandingsPage').classList.add('hidden');
+      document.getElementById('mainMenu').classList.remove('hidden');
+      syncProfileUI();
+    };
+
+    function handleTournamentMatchOutcome(outcome) {
+      // outcome: 'win' | 'draw' | 'loss'
+      if (!tournamentState || tournamentState.championWon) return;
+      const playerEntry = tournamentState.competitors.find(c => c.isPlayer);
+      if (playerEntry) {
+        if (outcome === 'win') playerEntry.points += 3;
+        else if (outcome === 'draw') playerEntry.points += 1;
+        playerEntry.elo = estimatedPlayerElo;
+      }
+
+      tournamentState.completedMatches += 1;
+
+      if (tournamentState.completedMatches >= tournamentState.totalMatches) {
+        tournamentState.championWon = true;
+        const winnerTitle = `${tournamentState.code} Tournament Winner`;
+        if (!tournamentTitles.includes(winnerTitle)) {
+          tournamentTitles.push(winnerTitle);
+        }
+        saveToCloud();
+        syncProfileUI();
+      }
+
+      document.getElementById('gameOverTourneyStandingsBtn').classList.remove('hidden');
+      document.getElementById('gameOverStandardActions').classList.add('hidden');
+    }
+
+    /* ========================================================================
+       MOTOR DE AJEDREZ JUGABLE
+       ======================================================================== */
     function initBoardState() {
       const backRow = ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'];
       board = Array.from({ length: 8 }, () => Array(8).fill(null));
-
       for (let c = 0; c < 8; c++) {
         board[0][c] = { color: 'b', type: backRow[c] };
         board[1][c] = { color: 'b', type: 'p' };
         board[6][c] = { color: 'w', type: 'p' };
         board[7][c] = { color: 'w', type: backRow[c] };
       }
-
       turn = 'w';
       selectedSq = null;
       legalMovesForSelected = [];
@@ -1270,52 +1544,45 @@
       isGameOver = false;
       pendingPromotion = null;
       arrows = [];
-      estimatedPlayerElo = gameMode === 'bot' ? Math.max(400, currentBotElo) : 650;
-
       if (botTimeout) clearTimeout(botTimeout);
       document.getElementById('gameOverModal').classList.add('hidden');
+      document.getElementById('gameOverTourneyStandingsBtn').classList.add('hidden');
+      document.getElementById('gameOverStandardActions').classList.remove('hidden');
       document.getElementById('promotionModal').classList.add('hidden');
     }
 
     window.startGame = function (mode, elo = 200) {
       gameMode = mode;
+      isOnlineMatch = (mode === 'online_random' || mode === 'tournament');
       currentBotElo = elo;
 
       document.getElementById('mainMenu').classList.add('hidden');
+      document.getElementById('tournamentLobbyPage').classList.add('hidden');
+      document.getElementById('tournamentStandingsPage').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('hidden');
       document.getElementById('gameScreen').classList.add('flex');
 
-      if (mode === 'bot') {
-        const cfg = customBotProfile || BOTS_CONFIG[elo] || BOTS_CONFIG[200];
-        document.getElementById('blackAvatar').innerText = cfg.avatar;
-        document.getElementById('blackName').innerText = cfg.name;
-        document.getElementById('blackEloBadge').innerText = cfg.displayElo || `${elo} ELO`;
-        document.getElementById('blackEloBadge').classList.remove('hidden');
-        document.getElementById('whiteAvatarBox').innerText = userProfile.avatar;
-        document.getElementById('whiteName').innerText = `${userProfile.username} ${userProfile.flag}`;
-        document.getElementById('whiteBioLine').innerText = userProfile.bio;
-        document.getElementById('botChatBox').classList.remove('hidden');
-        document.getElementById('botChatTitle').innerText = `${cfg.avatar} ${cfg.name} (${cfg.displayElo || elo + ' ELO'}):`;
-        document.getElementById('botComment').innerText = `"${cfg.phrases[0]}"`;
-      } else {
-        customBotProfile = null;
-        document.getElementById('blackAvatar').innerText = '♚';
-        document.getElementById('blackName').innerText = 'Jugador 2 (Negras)';
-        document.getElementById('blackEloBadge').classList.add('hidden');
-        document.getElementById('whiteAvatarBox').innerText = userProfile.avatar;
-        document.getElementById('whiteName').innerText = `${userProfile.username} ${userProfile.flag} (Blancas)`;
-        document.getElementById('whiteBioLine').innerText = userProfile.bio;
-        document.getElementById('botChatBox').classList.remove('hidden');
-        document.getElementById('botChatTitle').innerText = '💡 Modo Análisis Local:';
-        document.getElementById('botComment').innerText = 'Arrastra fichas con clic izquierdo y traza flechas con clic derecho.';
-      }
+      const cfg = customBotProfile || BOTS_CONFIG[elo] || BOTS_CONFIG[200];
+      document.getElementById('blackAvatar').innerText = cfg.avatar;
+      document.getElementById('blackName').innerText = cfg.name;
+      document.getElementById('blackEloBadge').innerText = cfg.displayElo || `${elo} ELO`;
+      document.getElementById('botChatTitle').innerText = `${cfg.avatar} ${cfg.name}:`;
+      document.getElementById('botComment').innerText = `"${cfg.phrases[0]}"`;
 
+      document.getElementById('whiteAvatarBox').innerText = userProfile.avatar;
+      document.getElementById('whiteName').innerText = `${userProfile.username} ${userProfile.flag}`;
+      document.getElementById('whiteCrownBadges').innerHTML = renderCrownBadgesHTML();
+      document.getElementById('livePlayerEloBadge').innerText = `ELO: ${estimatedPlayerElo}`;
+      document.getElementById('liveEloChip').innerText = `ELO: ${estimatedPlayerElo}`;
+
+      syncCoachPanel();
       applyThemeVariables();
       window.resetMatch();
     };
 
     window.backToMenu = function () {
       customBotProfile = null;
+      tournamentState = null;
       if (botTimeout) clearTimeout(botTimeout);
       document.getElementById('gameScreen').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('flex');
@@ -1326,8 +1593,8 @@
 
     window.resetMatch = function () {
       initBoardState();
-      updateEloUI();
-      setFeedbackBox('normal', 'Turno de las Blancas', 'Arrastra una ficha o haz clic para mover.');
+      setFeedbackBox('normal', 'Turno de las Blancas', 'Arrastra o haz clic para mover.');
+      syncCoachPanel();
       renderAll();
     };
 
@@ -1336,16 +1603,8 @@
       renderArrows();
     };
 
-    /* ========================================================================
-       4. MOTOR DE REGLAS Y EVALUACIÓN DE POSICIÓN
-       ======================================================================== */
-    function inBounds(r, c) {
-      return r >= 0 && r < 8 && c >= 0 && c < 8;
-    }
-
-    function cloneBoard(b) {
-      return b.map(row => row.map(cell => cell ? { ...cell } : null));
-    }
+    function inBounds(r, c) { return r >= 0 && r < 8 && c >= 0 && c < 8; }
+    function cloneBoard(b) { return b.map(row => row.map(cell => cell ? { ...cell } : null)); }
 
     function getPseudoMoves(b, r, c, epTarget, castle) {
       const piece = b[r][c];
@@ -1357,76 +1616,56 @@
       if (type === 'p') {
         const dir = color === 'w' ? -1 : 1;
         const startRow = color === 'w' ? 6 : 1;
-
         if (inBounds(r + dir, c) && !b[r + dir][c]) {
           moves.push({ fromR: r, fromC: c, toR: r + dir, toC: c });
           if (r === startRow && !b[r + 2 * dir][c]) {
             moves.push({ fromR: r, fromC: c, toR: r + 2 * dir, toC: c, isDoublePawn: true });
           }
         }
-
         for (const dc of [-1, 1]) {
           const nr = r + dir, nc = c + dc;
           if (inBounds(nr, nc)) {
-            if (b[nr][nc] && b[nr][nc].color === enemy) {
-              moves.push({ fromR: r, fromC: c, toR: nr, toC: nc });
-            } else if (epTarget && epTarget.r === nr && epTarget.c === nc) {
-              moves.push({ fromR: r, fromC: c, toR: nr, toC: nc, isEnPassant: true });
-            }
+            if (b[nr][nc] && b[nr][nc].color === enemy) moves.push({ fromR: r, fromC: c, toR: nr, toC: nc });
+            else if (epTarget && epTarget.r === nr && epTarget.c === nc) moves.push({ fromR: r, fromC: c, toR: nr, toC: nc, isEnPassant: true });
           }
         }
       } else if (type === 'n') {
-        const jumps = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
-        for (const [dr, dc] of jumps) {
+        [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr, dc]) => {
           const nr = r + dr, nc = c + dc;
-          if (inBounds(nr, nc) && (!b[nr][nc] || b[nr][nc].color === enemy)) {
-            moves.push({ fromR: r, fromC: c, toR: nr, toC: nc });
-          }
-        }
+          if (inBounds(nr, nc) && (!b[nr][nc] || b[nr][nc].color === enemy)) moves.push({ fromR: r, fromC: c, toR: nr, toC: nc });
+        });
       } else if (type === 'b' || type === 'r' || type === 'q') {
         const dirs = [];
         if (type === 'b' || type === 'q') dirs.push([-1,-1],[-1,1],[1,-1],[1,1]);
         if (type === 'r' || type === 'q') dirs.push([-1,0],[1,0],[0,-1],[0,1]);
-
         for (const [dr, dc] of dirs) {
           let nr = r + dr, nc = c + dc;
           while (inBounds(nr, nc)) {
-            if (!b[nr][nc]) {
-              moves.push({ fromR: r, fromC: c, toR: nr, toC: nc });
-            } else {
-              if (b[nr][nc].color === enemy) {
-                moves.push({ fromR: r, fromC: c, toR: nr, toC: nc });
-              }
+            if (!b[nr][nc]) moves.push({ fromR: r, fromC: c, toR: nr, toC: nc });
+            else {
+              if (b[nr][nc].color === enemy) moves.push({ fromR: r, fromC: c, toR: nr, toC: nc });
               break;
             }
-            nr += dr;
-            nc += dc;
+            nr += dr; nc += dc;
           }
         }
       } else if (type === 'k') {
-        for (let dr = -1; dr <= 1; dr++) {
-          for (let dc = -1; dc <= 1; dc++) {
-            if (dr === 0 && dc === 0) continue;
-            const nr = r + dr, nc = c + dc;
-            if (inBounds(nr, nc) && (!b[nr][nc] || b[nr][nc].color === enemy)) {
-              moves.push({ fromR: r, fromC: c, toR: nr, toC: nc });
-            }
-          }
+        for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+          if (!dr && !dc) continue;
+          const nr = r + dr, nc = c + dc;
+          if (inBounds(nr, nc) && (!b[nr][nc] || b[nr][nc].color === enemy)) moves.push({ fromR: r, fromC: c, toR: nr, toC: nc });
         }
-
         if (castle) {
           const homeRow = color === 'w' ? 7 : 0;
           if (r === homeRow && c === 4 && !isKingInCheck(b, color)) {
             const canShort = color === 'w' ? castle.wK : castle.bK;
-            if (canShort && !b[homeRow][5] && !b[homeRow][6] &&
-                b[homeRow][7] && b[homeRow][7].type === 'r' && b[homeRow][7].color === color) {
+            if (canShort && !b[homeRow][5] && !b[homeRow][6] && b[homeRow][7]?.type === 'r' && b[homeRow][7]?.color === color) {
               if (!isSquareAttacked(b, homeRow, 5, enemy) && !isSquareAttacked(b, homeRow, 6, enemy)) {
                 moves.push({ fromR: r, fromC: c, toR: homeRow, toC: 6, isCastle: 'short' });
               }
             }
             const canLong = color === 'w' ? castle.wQ : castle.bQ;
-            if (canLong && !b[homeRow][3] && !b[homeRow][2] && !b[homeRow][1] &&
-                b[homeRow][0] && b[homeRow][0].type === 'r' && b[homeRow][0].color === color) {
+            if (canLong && !b[homeRow][3] && !b[homeRow][2] && !b[homeRow][1] && b[homeRow][0]?.type === 'r' && b[homeRow][0]?.color === color) {
               if (!isSquareAttacked(b, homeRow, 3, enemy) && !isSquareAttacked(b, homeRow, 2, enemy)) {
                 moves.push({ fromR: r, fromC: c, toR: homeRow, toC: 2, isCastle: 'long' });
               }
@@ -1434,24 +1673,20 @@
           }
         }
       }
-
       return moves;
     }
 
     function isSquareAttacked(b, targetR, targetC, byColor) {
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const p = b[r][c];
-          if (p && p.color === byColor) {
-            if (p.type === 'p') {
-              const dir = byColor === 'w' ? -1 : 1;
-              if (r + dir === targetR && (c - 1 === targetC || c + 1 === targetC)) return true;
-            } else if (p.type === 'k') {
-              if (Math.abs(r - targetR) <= 1 && Math.abs(c - targetC) <= 1) return true;
-            } else {
-              const pMoves = getPseudoMoves(b, r, c, null, null);
-              if (pMoves.some(m => m.toR === targetR && m.toC === targetC)) return true;
-            }
+      for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) {
+        const p = b[r][c];
+        if (p && p.color === byColor) {
+          if (p.type === 'p') {
+            const dir = byColor === 'w' ? -1 : 1;
+            if (r + dir === targetR && (c - 1 === targetC || c + 1 === targetC)) return true;
+          } else if (p.type === 'k') {
+            if (Math.abs(r - targetR) <= 1 && Math.abs(c - targetC) <= 1) return true;
+          } else if (getPseudoMoves(b, r, c, null, null).some(m => m.toR === targetR && m.toC === targetC)) {
+            return true;
           }
         }
       }
@@ -1459,290 +1694,88 @@
     }
 
     function findKing(b, color) {
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          if (b[r][c] && b[r][c].color === color && b[r][c].type === 'k') return { r, c };
-        }
+      for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) {
+        if (b[r][c]?.color === color && b[r][c]?.type === 'k') return { r, c };
       }
       return null;
     }
 
     function isKingInCheck(b, color) {
-      const kingPos = findKing(b, color);
-      if (!kingPos) return false;
-      return isSquareAttacked(b, kingPos.r, kingPos.c, color === 'w' ? 'b' : 'w');
+      const k = findKing(b, color);
+      return k ? isSquareAttacked(b, k.r, k.c, color === 'w' ? 'b' : 'w') : false;
     }
 
     function applyMoveToBoard(b, move, promoType = 'q') {
       const nb = cloneBoard(b);
       const piece = nb[move.fromR][move.fromC];
       nb[move.fromR][move.fromC] = null;
-
       if (move.isEnPassant) nb[move.fromR][move.toC] = null;
-
-      if (move.isCastle === 'short') {
-        nb[move.fromR][5] = nb[move.fromR][7];
-        nb[move.fromR][7] = null;
-      } else if (move.isCastle === 'long') {
-        nb[move.fromR][3] = nb[move.fromR][0];
-        nb[move.fromR][0] = null;
-      }
-
-      if (piece.type === 'p' && (move.toR === 0 || move.toR === 7)) {
-        piece.type = promoType;
-      }
-
+      if (move.isCastle === 'short') { nb[move.fromR][5] = nb[move.fromR][7]; nb[move.fromR][7] = null; }
+      else if (move.isCastle === 'long') { nb[move.fromR][3] = nb[move.fromR][0]; nb[move.fromR][0] = null; }
+      if (piece.type === 'p' && (move.toR === 0 || move.toR === 7)) piece.type = promoType;
       nb[move.toR][move.toC] = piece;
       return nb;
     }
 
     function getLegalMovesForPiece(r, c) {
-      const piece = board[r][c];
-      if (!piece || piece.color !== turn) return [];
-      const pseudo = getPseudoMoves(board, r, c, enPassantTarget, castlingRights);
-      return pseudo.filter(m => !isKingInCheck(applyMoveToBoard(board, m), piece.color));
+      const p = board[r][c];
+      if (!p || p.color !== turn) return [];
+      return getPseudoMoves(board, r, c, enPassantTarget, castlingRights).filter(m => !isKingInCheck(applyMoveToBoard(board, m), p.color));
     }
 
     function getAllLegalMoves(color, customBoard = board) {
-      const allMoves = [];
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          if (customBoard[r][c] && customBoard[r][c].color === color) {
-            const pseudo = getPseudoMoves(customBoard, r, c, customBoard === board ? enPassantTarget : null, customBoard === board ? castlingRights : null);
-            for (const m of pseudo) {
-              if (!isKingInCheck(applyMoveToBoard(customBoard, m), color)) {
-                allMoves.push(m);
-              }
-            }
+      const list = [];
+      for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) {
+        if (customBoard[r][c]?.color === color) {
+          const pseudo = getPseudoMoves(customBoard, r, c, customBoard === board ? enPassantTarget : null, customBoard === board ? castlingRights : null);
+          for (const m of pseudo) {
+            if (!isKingInCheck(applyMoveToBoard(customBoard, m), color)) list.push(m);
           }
         }
       }
-      return allMoves;
+      return list;
     }
 
-    // Evaluación estática sencilla (positiva = ventaja Blancas, negativa = ventaja Negras)
-    function evaluateBoard(b, useGrandmasterPST = false) {
-      let score = 0;
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const p = b[r][c];
-          if (!p) continue;
-          let val = PIECE_VALUES[p.type] || 0;
-
-          if (useGrandmasterPST) {
-            const pstRow = p.color === 'w' ? r : 7 - r;
-            if (p.type === 'p') val += PST_PAWN[pstRow][c];
-            else if (p.type === 'n') val += PST_KNIGHT[pstRow][c];
-            else if (p.type === 'b') val += PST_BISHOP[pstRow][c];
-            else if (p.type === 'q' && (r >= 2 && r <= 5 && c >= 2 && c <= 5)) val += 15;
-            else if (p.type === 'k' && (c === 6 || c === 2) && (r === 0 || r === 7)) val += 40; // Bono por enroque
-          } else {
-            if ((r === 3 || r === 4) && (c === 3 || c === 4)) val += 25;
-          }
-
-          score += p.color === 'w' ? val : -val;
-        }
+    function evaluateBoard(b) {
+      let s = 0;
+      for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) {
+        const p = b[r][c];
+        if (!p) continue;
+        let v = PIECE_VALUES[p.type] || 0;
+        if ((r === 3 || r === 4) && (c === 3 || c === 4)) v += 25;
+        s += p.color === 'w' ? v : -v;
       }
-      return score;
-    }
-
-    // Motor Minimax con Poda Alfa-Beta para Copito (2400 ELO)
-    function minimaxCopito(b, depth, alpha, beta, isMaximizingWhite) {
-      if (depth === 0) {
-        return evaluateBoard(b, true);
-      }
-
-      const color = isMaximizingWhite ? 'w' : 'b';
-      const moves = getAllLegalMoves(color, b);
-
-      if (moves.length === 0) {
-        if (isKingInCheck(b, color)) {
-          return isMaximizingWhite ? -99999 - depth * 100 : 99999 + depth * 100;
-        }
-        return 0; // Ahogado
-      }
-
-      // Ordenar capturas primero para máxima eficiencia en poda Alfa-Beta
-      moves.sort((a, z) => {
-        const capA = b[a.toR][a.toC] ? PIECE_VALUES[b[a.toR][a.toC].type] : 0;
-        const capZ = b[z.toR][z.toC] ? PIECE_VALUES[b[z.toR][z.toC].type] : 0;
-        return capZ - capA;
-      });
-
-      if (isMaximizingWhite) {
-        let maxEval = -Infinity;
-        for (const m of moves) {
-          const ev = minimaxCopito(applyMoveToBoard(b, m), depth - 1, alpha, beta, false);
-          if (ev > maxEval) maxEval = ev;
-          if (ev > alpha) alpha = ev;
-          if (beta <= alpha) break;
-        }
-        return maxEval;
-      } else {
-        let minEval = Infinity;
-        for (const m of moves) {
-          const ev = minimaxCopito(applyMoveToBoard(b, m), depth - 1, alpha, beta, true);
-          if (ev < minEval) minEval = ev;
-          if (ev < beta) beta = ev;
-          if (beta <= alpha) break;
-        }
-        return minEval;
-      }
-    }
-
-    /* ========================================================================
-       5. DETECTOR DE JUGADA BRILLANTE (!!) Y CALCULADORA DE ELO EN VIVO
-       ======================================================================== */
-    function analyzePlayerMove(prevBoard, newBoard, move, movingPiece, capturedPiece, givesCheck, isMate) {
-      const enemy = movingPiece.color === 'w' ? 'b' : 'w';
-      const pieceVal = PIECE_VALUES[movingPiece.type];
-      const capVal = capturedPiece ? PIECE_VALUES[capturedPiece.type] : 0;
-
-      // ¿La casilla destino está defendida por el enemigo (posible sacrificio)?
-      const isLeftHanging = isSquareAttacked(newBoard, move.toR, move.toC, enemy) && pieceVal >= 300;
-      const isProtected = isSquareAttacked(newBoard, move.toR, move.toC, movingPiece.color);
-
-      // Condición de Jugada Brillante (!!):
-      // 1) Jaque mate directo
-      // 2) Sacrificio táctico de pieza valiosa (Caballo, Alfil, Torre o Dama) dando jaque o atacando pieza mayor
-      // 3) Enroque bajo presión o captura táctica brillante
-      let quality = 'good';
-      let badge = null;
-      let eloDelta = 12;
-
-      if (isMate) {
-        quality = 'brilliant';
-        badge = '!!';
-        eloDelta = 65;
-      } else if (isLeftHanging && (givesCheck || capVal >= 300 || move.isCastle)) {
-        quality = 'brilliant';
-        badge = '!!';
-        eloDelta = 55;
-      } else if (capVal > pieceVal || givesCheck || move.isCastle) {
-        quality = 'great';
-        badge = '!';
-        eloDelta = 28;
-      } else if (isLeftHanging && !isProtected && capVal === 0) {
-        quality = 'blunder';
-        badge = '??';
-        eloDelta = -35;
-      } else {
-        quality = 'good';
-        badge = null;
-        eloDelta = 10;
-      }
-
-      // Actualizar ELO estimado (tope realista entre 200 y 1400)
-      estimatedPlayerElo = Math.max(200, Math.min(1400, estimatedPlayerElo + eloDelta));
-      updateEloUI();
-
-      if (quality === 'brilliant') {
-        playSound('brilliant');
-        lastMoveBadge = { r: move.toR, c: move.toC, symbol: '!!' };
-        setFeedbackBox(
-          'brilliant',
-          '!! ¡JUGADA BRILLANTE!',
-          '¡Sacrificio / táctica espectacular estilo Gran Maestro!'
-        );
-      } else if (quality === 'great') {
-        lastMoveBadge = { r: move.toR, c: move.toC, symbol: '!' };
-        setFeedbackBox(
-          'great',
-          '! ¡Gran Jugada!',
-          givesCheck ? '¡Jaque agresivo poniendo presión!' : 'Ganaste ventaja material o seguridad.'
-        );
-      } else if (quality === 'blunder') {
-        lastMoveBadge = { r: move.toR, c: move.toC, symbol: '??' };
-        setFeedbackBox(
-          'blunder',
-          '?? ¡Error Grave (Blunder)!',
-          'Dejaste una pieza valiosa sin defensa.'
-        );
-      } else {
-        lastMoveBadge = null;
-        setFeedbackBox(
-          'normal',
-          givesCheck ? '⚠️ ¡JAQUE!' : 'Buena jugada sólida',
-          'Mantienes el control de la partida.'
-        );
-      }
+      return s;
     }
 
     function setFeedbackBox(type, title, desc) {
       const box = document.getElementById('moveFeedbackBox');
       const titleEl = document.getElementById('moveQualityTitle');
       const descEl = document.getElementById('moveQualityDesc');
-
-      box.className = 'p-3.5 rounded-xl border transition-all duration-300 ';
+      box.className = 'p-3.5 rounded-xl border ';
       if (type === 'brilliant') {
-        box.className += 'bg-[#1baca6]/20 border-[#1baca6] shadow-lg shadow-[#1baca6]/20';
+        box.className += 'bg-[#1baca6]/20 border-[#1baca6]';
         titleEl.className = 'text-sm font-black text-[#2ee6de]';
-      } else if (type === 'great') {
-        box.className += 'bg-sky-500/15 border-sky-500/60';
-        titleEl.className = 'text-sm font-bold text-sky-300';
-      } else if (type === 'blunder') {
-        box.className += 'bg-rose-500/15 border-rose-500/60';
-        titleEl.className = 'text-sm font-bold text-rose-400';
       } else {
         box.className += 'bg-[#14161a] border-gray-800';
         titleEl.className = 'text-sm font-bold text-emerald-400';
       }
-
       titleEl.innerText = title;
       descEl.innerText = desc;
     }
 
-    function updateEloUI() {
-      document.getElementById('livePlayerEloBadge').innerText = `ELO Est: ${estimatedPlayerElo}`;
-      document.getElementById('liveEloChip').innerText = `Tu ELO: ${estimatedPlayerElo}`;
-    }
-
-    /* ========================================================================
-       6. EJECUCIÓN DE MOVIMIENTOS, DRAG & DROP Y FLECHAS
-       ======================================================================== */
     function tryMoveFromTo(fromR, fromC, toR, toC) {
       if (isGameOver || pendingPromotion) return false;
-      if (gameMode === 'bot' && turn === 'b') return false;
-
-      const moves = getLegalMovesForPiece(fromR, fromC);
-      const chosenMove = moves.find(m => m.toR === toR && m.toC === toC);
-      if (!chosenMove) return false;
-
-      const movingPiece = board[chosenMove.fromR][chosenMove.fromC];
-      if (movingPiece.type === 'p' && (chosenMove.toR === 0 || chosenMove.toR === 7)) {
-        openPromotionModal(chosenMove);
+      if (gameMode !== 'local' && turn === 'b') return false;
+      const chosen = getLegalMovesForPiece(fromR, fromC).find(m => m.toR === toR && m.toC === toC);
+      if (!chosen) return false;
+      const piece = board[chosen.fromR][chosen.fromC];
+      if (piece.type === 'p' && (chosen.toR === 0 || chosen.toR === 7)) {
+        openPromotionModal(chosen);
         return true;
       }
-
-      executeMove(chosenMove);
+      executeMove(chosen);
       return true;
-    }
-
-    function handleSquareClick(r, c) {
-      // Clic izquierdo limpia flechas dibujadas
-      if (arrows.length > 0) {
-        arrows = [];
-        renderArrows();
-      }
-
-      if (isGameOver || pendingPromotion) return;
-      if (gameMode === 'bot' && turn === 'b') return;
-
-      if (selectedSq) {
-        const moved = tryMoveFromTo(selectedSq.r, selectedSq.c, r, c);
-        if (moved) return;
-      }
-
-      const clickedPiece = board[r][c];
-      if (clickedPiece && clickedPiece.color === turn) {
-        selectedSq = { r, c };
-        legalMovesForSelected = getLegalMovesForPiece(r, c);
-      } else {
-        selectedSq = null;
-        legalMovesForSelected = [];
-      }
-
-      renderBoard();
     }
 
     function openPromotionModal(move) {
@@ -1750,11 +1783,10 @@
       const modal = document.getElementById('promotionModal');
       const container = document.getElementById('promotionChoices');
       container.innerHTML = '';
-
       ['q', 'r', 'b', 'n'].forEach(type => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'w-16 h-16 bg-[#2a2e35] hover:bg-[#739552] border border-gray-600 rounded-xl flex items-center justify-center transition transform hover:scale-105';
+        btn.className = 'w-14 h-14 bg-[#2a2e35] hover:bg-[#739552] rounded-xl flex items-center justify-center';
         btn.innerHTML = getPieceSVG(turn, type);
         btn.onclick = () => {
           modal.classList.add('hidden');
@@ -1764,7 +1796,6 @@
         };
         container.appendChild(btn);
       });
-
       modal.classList.remove('hidden');
     }
 
@@ -1772,37 +1803,18 @@
       const prevBoard = cloneBoard(board);
       const movingPiece = { ...board[move.fromR][move.fromC] };
       let capturedPiece = board[move.toR][move.toC] ? { ...board[move.toR][move.toC] } : null;
-
-      if (move.isEnPassant) {
-        capturedPiece = { ...board[move.fromR][move.toC] };
-      }
+      if (move.isEnPassant) capturedPiece = { ...board[move.fromR][move.toC] };
 
       if (capturedPiece) {
         if (movingPiece.color === 'w') capturedWhite.push(capturedPiece);
         else capturedBlack.push(capturedPiece);
       }
 
-      // Actualizar derechos de enroque
       if (movingPiece.type === 'k') {
         if (movingPiece.color === 'w') { castlingRights.wK = false; castlingRights.wQ = false; }
         else { castlingRights.bK = false; castlingRights.bQ = false; }
       }
-      if (movingPiece.type === 'r') {
-        if (move.fromR === 7 && move.fromC === 0) castlingRights.wQ = false;
-        if (move.fromR === 7 && move.fromC === 7) castlingRights.wK = false;
-        if (move.fromR === 0 && move.fromC === 0) castlingRights.bQ = false;
-        if (move.fromR === 0 && move.fromC === 7) castlingRights.bK = false;
-      }
-      if (move.toR === 7 && move.toC === 0) castlingRights.wQ = false;
-      if (move.toR === 7 && move.toC === 7) castlingRights.wK = false;
-      if (move.toR === 0 && move.toC === 0) castlingRights.bQ = false;
-      if (move.toR === 0 && move.toC === 7) castlingRights.bK = false;
-
-      if (move.isDoublePawn) {
-        enPassantTarget = { r: (move.fromR + move.toR) / 2, c: move.fromC };
-      } else {
-        enPassantTarget = null;
-      }
+      enPassantTarget = move.isDoublePawn ? { r: (move.fromR + move.toR) / 2, c: move.fromC } : null;
 
       board = applyMoveToBoard(board, move, promoType);
       lastMove = move;
@@ -1814,260 +1826,97 @@
       turn = turn === 'w' ? 'b' : 'w';
 
       const inCheck = isKingInCheck(board, turn);
-      const nextLegalMoves = getAllLegalMoves(turn);
-      const isMate = nextLegalMoves.length === 0 && inCheck;
+      const nextMoves = getAllLegalMoves(turn);
+      const isMate = nextMoves.length === 0 && inCheck;
 
-      // Analizar jugada del humano (Blancas o modo local)
       if (moverColor === 'w' || gameMode === 'local') {
-        analyzePlayerMove(prevBoard, board, move, movingPiece, capturedPiece, inCheck, isMate);
+        const enemy = moverColor === 'w' ? 'b' : 'w';
+        const hanging = isSquareAttacked(board, move.toR, move.toC, enemy) && PIECE_VALUES[movingPiece.type] >= 300;
+        if (isMate || (hanging && (inCheck || (capturedPiece && PIECE_VALUES[capturedPiece.type] >= 300)))) {
+          lastMoveBadge = { r: move.toR, c: move.toC, symbol: '!!' };
+          playSound('brilliant');
+          setFeedbackBox('brilliant', '!! ¡JUGADA BRILLANTE!', 'Táctica de alto nivel.');
+        } else {
+          lastMoveBadge = null;
+          setFeedbackBox('normal', inCheck ? '⚠️ ¡JAQUE!' : 'Movimiento registrado', 'Buen control de posición.');
+        }
       } else {
         lastMoveBadge = null;
       }
 
-      const notation = buildNotation(movingPiece, move, capturedPiece, promoType, inCheck, isMate);
-      recordMove(moverColor, notation);
+      const files = ['a','b','c','d','e','f','g','h'];
+      const note = `${files[move.fromC]}${8 - move.fromR}-${files[move.toC]}${8 - move.toR}` + (isMate ? '#' : inCheck ? '+' : '');
+      if (moverColor === 'w') moveHistoryList.push({ num: moveHistoryList.length + 1, w: note, b: '' });
+      else if (moveHistoryList.length) moveHistoryList[moveHistoryList.length - 1].b = note;
 
-      // Sonidos (si no sonó ya el de Jugada Brillante)
-      if (nextLegalMoves.length === 0) {
-        playSound('gameover');
-      } else if (!(lastMoveBadge && lastMoveBadge.symbol === '!!')) {
-        if (inCheck) playSound('check');
-        else if (move.isCastle) playSound('castle');
-        else if (capturedPiece) playSound('capture');
-        else playSound('move');
-      }
+      if (nextMoves.length === 0) playSound('gameover');
+      else if (!(lastMoveBadge?.symbol === '!!')) playSound(capturedPiece ? 'capture' : 'move');
 
+      updateCoachLiveAdvice();
       renderAll();
 
-      if (nextLegalMoves.length === 0) {
+      if (nextMoves.length === 0) {
         isGameOver = true;
-        showGameOver(inCheck, moverColor);
+        finishMatch(inCheck ? moverColor : 'draw');
         return;
       }
 
-      if (gameMode === 'bot' && turn === 'b' && !isGameOver) {
-        botTimeout = setTimeout(makeBotMove, 480);
+      if (gameMode !== 'local' && turn === 'b' && !isGameOver) {
+        botTimeout = setTimeout(makeBotMove, 380);
       }
     }
 
-    function buildNotation(piece, move, captured, promo, inCheck, isMate) {
-      if (move.isCastle === 'short') return 'O-O' + (isMate ? '#' : inCheck ? '+' : '');
-      if (move.isCastle === 'long') return 'O-O-O' + (isMate ? '#' : inCheck ? '+' : '');
-
-      const files = ['a','b','c','d','e','f','g','h'];
-      const pieceLetters = { p: '', n: 'C', b: 'A', r: 'T', q: 'D', k: 'R' };
-      const dest = files[move.toC] + (8 - move.toR);
-      let text = '';
-
-      if (piece.type === 'p') {
-        if (captured) text += files[move.fromC] + 'x';
-        text += dest;
-        if (move.toR === 0 || move.toR === 7) text += '=' + pieceLetters[promo];
-      } else {
-        text += pieceLetters[piece.type] + (captured ? 'x' : '') + dest;
-      }
-
-      if (isMate) text += '#';
-      else if (inCheck) text += '+';
-      if (lastMoveBadge && lastMoveBadge.symbol === '!!') text += '!!';
-      return text;
-    }
-
-    /* ========================================================================
-       7. IA DE BOTS SEGÚN ELO (200, 500, 800, 1000 ELO)
-       ======================================================================== */
     function makeBotMove() {
       if (isGameOver || turn !== 'b') return;
-      const legalMoves = getAllLegalMoves('b');
-      if (legalMoves.length === 0) return;
+      const moves = getAllLegalMoves('b');
+      if (!moves.length) return;
 
-      let chosenMove = null;
-
-      if (currentBotElo <= 200) {
-        // 200 ELO: Casi totalmente aleatorio
-        const captures = legalMoves.filter(m => board[m.toR][m.toC] !== null);
-        if (captures.length > 0 && Math.random() < 0.25) {
-          chosenMove = captures[Math.floor(Math.random() * captures.length)];
-        } else {
-          chosenMove = legalMoves[Math.floor(Math.random() * legalMoves.length)];
-        }
-      } else if (currentBotElo <= 500) {
-        // 500 ELO: Captura piezas si las ve, si no mueve al azar
-        const captures = legalMoves.filter(m => board[m.toR][m.toC] !== null || m.isEnPassant);
-        if (captures.length > 0 && Math.random() < 0.7) {
-          chosenMove = captures[Math.floor(Math.random() * captures.length)];
-        } else {
-          chosenMove = legalMoves[Math.floor(Math.random() * legalMoves.length)];
-        }
-      } else if (currentBotElo <= 800) {
-        // 800 ELO: Evalúa ganancia material inmediata (1 paso) con algo de ruido
+      let chosen = moves[Math.floor(Math.random() * moves.length)];
+      if (currentBotElo >= 500) {
         let bestScore = Infinity;
-        let candidates = [];
-        for (const m of legalMoves) {
-          const sim = applyMoveToBoard(board, m);
-          const evalScore = evaluateBoard(sim) + (Math.random() * 140 - 70);
-          if (evalScore < bestScore) {
-            bestScore = evalScore;
-            candidates = [m];
-          } else if (Math.abs(evalScore - bestScore) < 30) {
-            candidates.push(m);
-          }
-        }
-        chosenMove = candidates[Math.floor(Math.random() * candidates.length)];
-      } else if (currentBotElo <= 1000) {
-        // 1000 ELO: Minimax de profundidad 2 (mira su jugada y la mejor respuesta del jugador)
-        let bestScore = Infinity;
-        let bestMoves = [];
-        for (const m of legalMoves) {
-          const sim1 = applyMoveToBoard(board, m);
-          const whiteReplies = getAllLegalMoves('w', sim1);
-          let worstReplyForBlack = -Infinity;
-
-          if (whiteReplies.length === 0) {
-            worstReplyForBlack = isKingInCheck(sim1, 'w') ? -99999 : 0;
-          } else {
-            for (const wm of whiteReplies) {
-              const sim2 = applyMoveToBoard(sim1, wm);
-              const s = evaluateBoard(sim2, false);
-              if (s > worstReplyForBlack) worstReplyForBlack = s;
-            }
-          }
-
-          const finalScore = worstReplyForBlack + (Math.random() * 45 - 22);
-          if (finalScore < bestScore) {
-            bestScore = finalScore;
-            bestMoves = [m];
-          } else if (Math.abs(finalScore - bestScore) < 15) {
-            bestMoves.push(m);
-          }
-        }
-        chosenMove = bestMoves[Math.floor(Math.random() * bestMoves.length)];
-      } else if (currentBotElo === 2400) {
-        // BOSS COPITO (1 ELO aparente / 2400 ELO real):
-        // Secuencia secreta única para derrotarlo (Gambito Tennison / Trampa al Rey):
-        // 1. Cf3 -> d5 | 2. e4 -> dxe4 | 3. Ce5 -> e6 | 4. Dh5 -> Cf6 | 5. Dxf7#
-        let trapPhrase = null;
-        const m1 = moveHistoryList[0]?.w;
-        const m2 = moveHistoryList[1]?.w;
-        const m3 = moveHistoryList[2]?.w;
-        const m4 = moveHistoryList[3]?.w;
-
-        if (moveHistoryList.length === 1 && m1 === 'Cf3') {
-          const d5 = legalMoves.find(m => m.fromR === 1 && m.fromC === 3 && m.toR === 3 && m.toC === 3);
-          if (d5) {
-            chosenMove = d5;
-            trapPhrase = "Pío... d5. Dominando el centro desde el turno 1.";
-          }
-        } else if (moveHistoryList.length === 2 && m1 === 'Cf3' && m2 === 'e4') {
-          const dxe4 = legalMoves.find(m => m.fromR === 3 && m.fromC === 3 && m.toR === 4 && m.toC === 4);
-          if (dxe4) {
-            chosenMove = dxe4;
-            trapPhrase = "¿Me regalas un peón central? Pío pío, qué delicioso alpiste gratis.";
-          }
-        } else if (moveHistoryList.length === 3 && m1 === 'Cf3' && m2 === 'e4' && m3 === 'Ce5') {
-          const e6 = legalMoves.find(m => m.fromR === 1 && m.fromC === 4 && m.toR === 2 && m.toC === 4);
-          if (e6) {
-            chosenMove = e6;
-            trapPhrase = "Pío... e6. Mi estructura es impenetrable, humano.";
-          }
-        } else if (moveHistoryList.length === 4 && m1 === 'Cf3' && m2 === 'e4' && m3 === 'Ce5' && m4 === 'Dh5') {
-          const nf6 = legalMoves.find(m => m.fromR === 0 && m.fromC === 6 && m.toR === 2 && m.toC === 5);
-          if (nf6) {
-            chosenMove = nf6;
-            trapPhrase = "¡Ja! Pío pío, ataco tu dama con mi caballo... espera... ¿por qué sonríes?";
-          }
-        } else if (moveHistoryList.length === 1 && m1 === 'e4') {
-          const sicilian = legalMoves.find(m => m.fromR === 1 && m.fromC === 2 && m.toR === 3 && m.toC === 2);
-          if (sicilian) chosenMove = sicilian;
-        } else if (moveHistoryList.length === 1 && m1 === 'd4') {
-          const kingsIndian = legalMoves.find(m => m.fromR === 0 && m.fromC === 6 && m.toR === 2 && m.toC === 5);
-          if (kingsIndian) chosenMove = kingsIndian;
-        }
-
-        if (!chosenMove) {
-          let bestScore = Infinity;
-          let bestMoves = [];
-
-          // Ordenar jugadas candidatas por capturas/jaques primero
-          legalMoves.sort((a, z) => {
-            const capA = board[a.toR][a.toC] ? PIECE_VALUES[board[a.toR][a.toC].type] : 0;
-            const capZ = board[z.toR][z.toC] ? PIECE_VALUES[board[z.toR][z.toC].type] : 0;
-            return capZ - capA;
-          });
-
-          for (const m of legalMoves) {
-            const simBoard = applyMoveToBoard(board, m);
-            const score = minimaxCopito(simBoard, 2, -Infinity, Infinity, true);
-            if (score < bestScore) {
-              bestScore = score;
-              bestMoves = [m];
-            } else if (score === bestScore) {
-              bestMoves.push(m);
-            }
-          }
-          chosenMove = bestMoves[Math.floor(Math.random() * bestMoves.length)];
-        }
-
-        if (trapPhrase) {
-          document.getElementById('botComment').innerText = `"${trapPhrase}"`;
-          executeMove(chosenMove, 'q');
-          return;
-        }
-      } else {
-        // BOSS SUPREMO: COPITO EL GRAN MAESTRO (0 ELO aparente / 3000 ELO real)
-        // Rechaza trampas baratas y calcula a máxima profundidad (3 plies Alfa-Beta)
-        if (moveHistoryList.length === 1) {
-          const m1 = moveHistoryList[0]?.w;
-          if (m1 === 'e4') {
-            const sicilian = legalMoves.find(m => m.fromR === 1 && m.fromC === 2 && m.toR === 3 && m.toC === 2);
-            if (sicilian) chosenMove = sicilian;
-          } else if (m1 === 'd4') {
-            const kingsIndian = legalMoves.find(m => m.fromR === 0 && m.fromC === 6 && m.toR === 2 && m.toC === 5);
-            if (kingsIndian) chosenMove = kingsIndian;
-          } else if (m1 === 'Cf3') {
-            const nf6 = legalMoves.find(m => m.fromR === 0 && m.fromC === 6 && m.toR === 2 && m.toC === 5);
-            if (nf6) chosenMove = nf6;
-          }
-        }
-
-        if (!chosenMove) {
-          let bestScore = Infinity;
-          let bestMoves = [];
-
-          legalMoves.sort((a, z) => {
-            const capA = board[a.toR][a.toC] ? PIECE_VALUES[board[a.toR][a.toC].type] : 0;
-            const capZ = board[z.toR][z.toC] ? PIECE_VALUES[board[z.toR][z.toC].type] : 0;
-            return capZ - capA;
-          });
-
-          for (const m of legalMoves) {
-            const simBoard = applyMoveToBoard(board, m);
-            const score = minimaxCopito(simBoard, 3, -Infinity, Infinity, true);
-            if (score < bestScore) {
-              bestScore = score;
-              bestMoves = [m];
-            } else if (score === bestScore) {
-              bestMoves.push(m);
-            }
-          }
-          chosenMove = bestMoves[Math.floor(Math.random() * bestMoves.length)];
+        for (const m of moves) {
+          const ev = evaluateBoard(applyMoveToBoard(board, m)) + (currentBotElo >= 2000 ? 0 : (Math.random() * 110 - 55));
+          if (ev < bestScore) { bestScore = ev; chosen = m; }
         }
       }
 
       const cfg = customBotProfile || BOTS_CONFIG[currentBotElo] || BOTS_CONFIG[200];
-      let phraseList = cfg.phrases;
-      if (currentBotElo === 3000 && cfg.winningPhrases && evaluateBoard(board, false) <= -200) {
-        phraseList = cfg.winningPhrases;
-      }
-      const phrase = phraseList[Math.floor(Math.random() * phraseList.length)];
-      document.getElementById('botComment').innerText = `"${phrase}"`;
-
-      executeMove(chosenMove, 'q');
+      document.getElementById('botComment').innerText = `"${cfg.phrases[Math.floor(Math.random() * cfg.phrases.length)]}"`;
+      executeMove(chosen, 'q');
     }
 
-    /* ========================================================================
-       8. RENDERIZADO DEL TABLERO, DRAG & DROP Y FLECHAS TÁCTICAS
-       ======================================================================== */
+    function finishMatch(resultSide) {
+      // resultSide: 'w' | 'b' | 'draw'
+      const modal = document.getElementById('gameOverModal');
+      const titleEl = document.getElementById('gameOverTitle');
+      const reasonEl = document.getElementById('gameOverReason');
+      const eloEl = document.getElementById('finalEloDisplay');
+
+      if (resultSide === 'w') {
+        titleEl.innerText = '¡Victoria!';
+        reasonEl.innerText = 'Ganaste la partida en el tablero.';
+        estimatedPlayerElo = Math.min(3000, estimatedPlayerElo + 25);
+        if (gameMode === 'tournament') handleTournamentMatchOutcome('win');
+      } else if (resultSide === 'b') {
+        titleEl.innerText = 'Derrota';
+        reasonEl.innerText = 'El rival se impuso esta vez.';
+        estimatedPlayerElo = Math.max(200, estimatedPlayerElo - 15);
+        if (gameMode === 'tournament') handleTournamentMatchOutcome('loss');
+      } else {
+        titleEl.innerText = 'Tablas';
+        reasonEl.innerText = 'La partida terminó en tablas.';
+        estimatedPlayerElo = Math.min(3000, estimatedPlayerElo + 5);
+        if (gameMode === 'tournament') handleTournamentMatchOutcome('draw');
+      }
+
+      eloEl.innerText = `${estimatedPlayerElo} ELO`;
+      document.getElementById('livePlayerEloBadge').innerText = `ELO: ${estimatedPlayerElo}`;
+      document.getElementById('liveEloChip').innerText = `ELO: ${estimatedPlayerElo}`;
+      saveToCloud();
+      syncProfileUI();
+      modal.classList.remove('hidden');
+    }
+
     function renderAll() {
       renderBoard();
       renderArrows();
@@ -2079,182 +1928,111 @@
     function renderBoard() {
       const boardEl = document.getElementById('chessBoard');
       boardEl.innerHTML = '';
+      const files = ['a','b','c','d','e','f','g','h'];
+      const kingCheck = isKingInCheck(board, turn) ? findKing(board, turn) : null;
 
-      const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-      const kingInCheckPos = isKingInCheck(board, turn) ? findKing(board, turn) : null;
+      for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) {
+        const sq = document.createElement('div');
+        sq.className = `square ${(r + c) % 2 === 0 ? 'sq-light' : 'sq-dark'}`;
+        if (selectedSq?.r === r && selectedSq?.c === c) sq.classList.add('sq-selected');
+        if (lastMove && ((lastMove.fromR === r && lastMove.fromC === c) || (lastMove.toR === r && lastMove.toC === c))) sq.classList.add('sq-last-move');
+        if (kingCheck?.r === r && kingCheck?.c === c) sq.classList.add('sq-check');
 
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const sq = document.createElement('div');
-          const isLight = (r + c) % 2 === 0;
-          sq.className = `square ${isLight ? 'sq-light' : 'sq-dark'}`;
-          sq.dataset.r = r;
-          sq.dataset.c = c;
+        if (c === 0) { const s = document.createElement('span'); s.className = 'coord-rank'; s.innerText = 8 - r; sq.appendChild(s); }
+        if (r === 7) { const s = document.createElement('span'); s.className = 'coord-file'; s.innerText = files[c]; sq.appendChild(s); }
 
-          if (lastMove && ((lastMove.fromR === r && lastMove.fromC === c) || (lastMove.toR === r && lastMove.toC === c))) {
-            sq.classList.add('sq-last-move');
-          }
-
-          if (selectedSq && selectedSq.r === r && selectedSq.c === c) {
-            sq.classList.add('sq-selected');
-          }
-
-          if (kingInCheckPos && kingInCheckPos.r === r && kingInCheckPos.c === c) {
-            sq.classList.add('sq-check');
-          }
-
-          // Coordenadas borde
-          if (c === 0) {
-            const rankSpan = document.createElement('span');
-            rankSpan.className = 'coord-rank';
-            rankSpan.innerText = 8 - r;
-            sq.appendChild(rankSpan);
-          }
-          if (r === 7) {
-            const fileSpan = document.createElement('span');
-            fileSpan.className = 'coord-file';
-            fileSpan.innerText = files[c];
-            sq.appendChild(fileSpan);
-          }
-
-          // Insignia de Jugada Brillante (!!) o Gran Jugada (!)
-          if (lastMoveBadge && lastMoveBadge.r === r && lastMoveBadge.c === c) {
-            const badge = document.createElement('div');
-            badge.className = 'brilliant-badge';
-            if (lastMoveBadge.symbol === '??') badge.style.background = '#e11d48';
-            else if (lastMoveBadge.symbol === '!') badge.style.background = '#0284c7';
-            badge.innerText = lastMoveBadge.symbol;
-            sq.appendChild(badge);
-          }
-
-          // Pieza arrastrable
-          const piece = board[r][c];
-          if (piece) {
-            const pWrap = document.createElement('div');
-            pWrap.className = 'piece-wrapper';
-            pWrap.innerHTML = getPieceSVG(piece.color, piece.type);
-
-            const canDrag = !isGameOver && !pendingPromotion && piece.color === turn && !(gameMode === 'bot' && turn === 'b');
-            pWrap.draggable = canDrag;
-
-            if (canDrag) {
-              pWrap.addEventListener('dragstart', (e) => {
-                draggedFrom = { r, c };
-                selectedSq = { r, c };
-                legalMovesForSelected = getLegalMovesForPiece(r, c);
-                e.dataTransfer.effectAllowed = 'move';
-                setTimeout(() => { pWrap.style.opacity = '0.45'; }, 0);
-              });
-
-              pWrap.addEventListener('dragend', () => {
-                pWrap.style.opacity = '1';
-                draggedFrom = null;
-              });
-            }
-
-            sq.appendChild(pWrap);
-          }
-
-          // Indicador de movimiento legal
-          const legalMove = legalMovesForSelected.find(m => m.toR === r && m.toC === c);
-          if (legalMove) {
-            if (piece || legalMove.isEnPassant) {
-              const ring = document.createElement('div');
-              ring.className = 'capture-ring';
-              sq.appendChild(ring);
-            } else {
-              const dot = document.createElement('div');
-              dot.className = 'move-dot';
-              sq.appendChild(dot);
-            }
-          }
-
-          // Eventos Drop en casilla
-          sq.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            sq.classList.add('sq-drag-over');
-          });
-
-          sq.addEventListener('dragleave', () => {
-            sq.classList.remove('sq-drag-over');
-          });
-
-          sq.addEventListener('drop', (e) => {
-            e.preventDefault();
-            sq.classList.remove('sq-drag-over');
-            if (draggedFrom) {
-              tryMoveFromTo(draggedFrom.r, draggedFrom.c, r, c);
-              draggedFrom = null;
-            }
-          });
-
-          // Eventos Clic Derecho para Flechas Tácticas
-          sq.addEventListener('contextmenu', (e) => e.preventDefault());
-          sq.addEventListener('mousedown', (e) => {
-            if (e.button === 2) {
-              rightDragStart = { r, c };
-            }
-          });
-          sq.addEventListener('mouseup', (e) => {
-            if (e.button === 2 && rightDragStart) {
-              if (rightDragStart.r !== r || rightDragStart.c !== c) {
-                toggleArrow(rightDragStart.r, rightDragStart.c, r, c);
-              }
-              rightDragStart = null;
-            }
-          });
-
-          sq.onclick = () => handleSquareClick(r, c);
-          boardEl.appendChild(sq);
+        if (lastMoveBadge?.r === r && lastMoveBadge?.c === c) {
+          const b = document.createElement('div');
+          b.className = 'brilliant-badge';
+          b.innerText = lastMoveBadge.symbol;
+          sq.appendChild(b);
         }
-      }
-    }
 
-    function toggleArrow(fromR, fromC, toR, toC) {
-      const idx = arrows.findIndex(a => a.fromR === fromR && a.fromC === fromC && a.toR === toR && a.toC === toC);
-      if (idx !== -1) {
-        arrows.splice(idx, 1);
-      } else {
-        arrows.push({ fromR, fromC, toR, toC, color: 'rgba(255, 170, 0, 0.82)' });
+        const p = board[r][c];
+        if (p) {
+          const w = document.createElement('div');
+          w.className = 'piece-wrapper';
+          w.innerHTML = getPieceSVG(p.color, p.type);
+          const canDrag = !isGameOver && !pendingPromotion && p.color === turn && !(gameMode !== 'local' && turn === 'b');
+          w.draggable = canDrag;
+          if (canDrag) {
+            w.addEventListener('dragstart', e => {
+              draggedFrom = { r, c };
+              selectedSq = { r, c };
+              legalMovesForSelected = getLegalMovesForPiece(r, c);
+              e.dataTransfer.effectAllowed = 'move';
+            });
+          }
+          sq.appendChild(w);
+        }
+
+        const legal = legalMovesForSelected.find(m => m.toR === r && m.toC === c);
+        if (legal) {
+          const dot = document.createElement('div');
+          dot.className = (p || legal.isEnPassant) ? 'capture-ring' : 'move-dot';
+          sq.appendChild(dot);
+        }
+
+        sq.addEventListener('dragover', e => e.preventDefault());
+        sq.addEventListener('drop', e => {
+          e.preventDefault();
+          if (draggedFrom) { tryMoveFromTo(draggedFrom.r, draggedFrom.c, r, c); draggedFrom = null; }
+        });
+
+        sq.addEventListener('contextmenu', e => e.preventDefault());
+        sq.addEventListener('mousedown', e => { if (e.button === 2) rightDragStart = { r, c }; });
+        sq.addEventListener('mouseup', e => {
+          if (e.button === 2 && rightDragStart) {
+            if (rightDragStart.r !== r || rightDragStart.c !== c) {
+              const idx = arrows.findIndex(a => a.fromR === rightDragStart.r && a.fromC === rightDragStart.c && a.toR === r && a.toC === c);
+              if (idx >= 0) arrows.splice(idx, 1);
+              else arrows.push({ fromR: rightDragStart.r, fromC: rightDragStart.c, toR: r, toC: c, color: 'rgba(255, 170, 0, 0.85)' });
+              renderArrows();
+            }
+            rightDragStart = null;
+          }
+        });
+
+        sq.onclick = () => {
+          if (arrows.length) { arrows = []; renderArrows(); }
+          if (isGameOver || pendingPromotion || (gameMode !== 'local' && turn === 'b')) return;
+          if (selectedSq && tryMoveFromTo(selectedSq.r, selectedSq.c, r, c)) return;
+          if (board[r][c]?.color === turn) {
+            selectedSq = { r, c };
+            legalMovesForSelected = getLegalMovesForPiece(r, c);
+          } else {
+            selectedSq = null;
+            legalMovesForSelected = [];
+          }
+          renderBoard();
+        };
+
+        boardEl.appendChild(sq);
       }
-      renderArrows();
     }
 
     function renderArrows() {
       const svg = document.getElementById('arrowOverlay');
       svg.innerHTML = '';
-
       arrows.forEach(a => {
-        const x1 = a.fromC * 100 + 50;
-        const y1 = a.fromR * 100 + 50;
-        const x2 = a.toC * 100 + 50;
-        const y2 = a.toR * 100 + 50;
-
-        const angle = Math.atan2(y2 - y1, x2 - x1);
-        const headLen = 28;
-        const shorten = 18;
-
-        const endX = x2 - Math.cos(angle) * shorten;
-        const endY = y2 - Math.sin(angle) * shorten;
-        const startX = x1 + Math.cos(angle) * 14;
-        const startY = y1 + Math.sin(angle) * 14;
-
+        const x1 = a.fromC * 100 + 50, y1 = a.fromR * 100 + 50;
+        const x2 = a.toC * 100 + 50, y2 = a.toR * 100 + 50;
+        const ang = Math.atan2(y2 - y1, x2 - x1);
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', startX);
-        line.setAttribute('y1', startY);
-        line.setAttribute('x2', endX);
-        line.setAttribute('y2', endY);
+        line.setAttribute('x1', x1 + Math.cos(ang) * 14);
+        line.setAttribute('y1', y1 + Math.sin(ang) * 14);
+        line.setAttribute('x2', x2 - Math.cos(ang) * 18);
+        line.setAttribute('y2', y2 - Math.sin(ang) * 18);
         line.setAttribute('stroke', a.color);
         line.setAttribute('stroke-width', '14');
         line.setAttribute('stroke-linecap', 'round');
         svg.appendChild(line);
 
-        const p1x = x2 - headLen * Math.cos(angle - Math.PI / 6);
-        const p1y = y2 - headLen * Math.sin(angle - Math.PI / 6);
-        const p2x = x2 - headLen * Math.cos(angle + Math.PI / 6);
-        const p2y = y2 - headLen * Math.sin(angle + Math.PI / 6);
-
         const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        const p1x = x2 - 28 * Math.cos(ang - Math.PI / 6);
+        const p1y = y2 - 28 * Math.sin(ang - Math.PI / 6);
+        const p2x = x2 - 28 * Math.cos(ang + Math.PI / 6);
+        const p2y = y2 - 28 * Math.sin(ang + Math.PI / 6);
         poly.setAttribute('points', `${x2},${y2} ${p1x},${p1y} ${p2x},${p2y}`);
         poly.setAttribute('fill', a.color);
         svg.appendChild(poly);
@@ -2262,94 +2040,30 @@
     }
 
     function renderStatus() {
-      const whiteBadge = document.getElementById('whiteTurnBadge');
-      const blackBadge = document.getElementById('blackTurnBadge');
-
-      if (turn === 'w') {
-        whiteBadge.classList.remove('hidden');
-        blackBadge.classList.add('hidden');
-      } else {
-        whiteBadge.classList.add('hidden');
-        blackBadge.classList.remove('hidden');
-        blackBadge.innerText = gameMode === 'bot' ? 'Bot pensando...' : 'Turno Negras';
-      }
+      document.getElementById('whiteTurnBadge').classList.toggle('hidden', turn !== 'w');
+      document.getElementById('blackTurnBadge').classList.toggle('hidden', turn !== 'b');
     }
 
     function renderCaptured() {
-      const order = { q: 1, r: 2, b: 3, n: 4, p: 5 };
-      const sortFn = (a, b) => order[a.type] - order[b.type];
-
-      document.getElementById('capturedByWhite').innerHTML =
-        [...capturedWhite].sort(sortFn).map(p => `<span>${PIECE_UNICODE[p.color][p.type]}</span>`).join('');
-
-      document.getElementById('capturedByBlack').innerHTML =
-        [...capturedBlack].sort(sortFn).map(p => `<span>${PIECE_UNICODE[p.color][p.type]}</span>`).join('');
-    }
-
-    function recordMove(color, notation) {
-      if (color === 'w') {
-        moveHistoryList.push({ num: moveHistoryList.length + 1, w: notation, b: '' });
-      } else {
-        moveHistoryList[moveHistoryList.length - 1].b = notation;
-      }
+      document.getElementById('capturedByWhite').innerHTML = capturedWhite.map(p => PIECE_UNICODE[p.color][p.type]).join(' ');
+      document.getElementById('capturedByBlack').innerHTML = capturedBlack.map(p => PIECE_UNICODE[p.color][p.type]).join(' ');
     }
 
     function renderHistory() {
-      const histEl = document.getElementById('moveHistory');
-      if (moveHistoryList.length === 0) {
-        histEl.innerHTML = '<div class="text-gray-500 italic">Aún no hay movimientos...</div>';
+      const h = document.getElementById('moveHistory');
+      if (!moveHistoryList.length) {
+        h.innerHTML = '<div class="text-gray-500 italic">Aún no hay movimientos...</div>';
         return;
       }
-
-      histEl.innerHTML = moveHistoryList.map(row => `
-        <div class="grid grid-cols-3 py-1 px-2 rounded hover:bg-white/5">
-          <span class="text-gray-500">${row.num}.</span>
-          <span class="${row.w.includes('!!') ? 'text-[#2ee6de] font-black' : 'text-white font-semibold'}">${row.w}</span>
-          <span class="text-gray-300 font-semibold">${row.b}</span>
-        </div>
-      `).join('');
-
-      histEl.scrollTop = histEl.scrollHeight;
+      h.innerHTML = moveHistoryList.map(row =>
+        `<div class="grid grid-cols-3 py-0.5"><span class="text-gray-500">${row.num}.</span><span class="text-white">${row.w}</span><span class="text-gray-300">${row.b}</span></div>`
+      ).join('');
+      h.scrollTop = h.scrollHeight;
     }
 
-    function showGameOver(isCheckmate, winnerColor) {
-      const modal = document.getElementById('gameOverModal');
-      const icon = document.getElementById('gameOverIcon');
-      const title = document.getElementById('gameOverTitle');
-      const reason = document.getElementById('gameOverReason');
-      const finalElo = document.getElementById('finalEloDisplay');
-
-      if (isCheckmate) {
-        icon.innerText = '🏆';
-        title.innerText = '¡JAQUE MATE!';
-        const cfg = BOTS_CONFIG[currentBotElo];
-        const botLabel = cfg ? `${cfg.name} (${cfg.displayElo || currentBotElo + ' ELO'})` : `el Bot`;
-        const winnerName = winnerColor === 'w'
-          ? 'las Blancas'
-          : (gameMode === 'bot' ? botLabel : 'las Negras');
-        reason.innerText = `Victoria para ${winnerName}.`;
-        if (winnerColor === 'w' && gameMode === 'bot') {
-          estimatedPlayerElo = Math.max(estimatedPlayerElo, currentBotElo + 120);
-          if (currentBotElo === 3000 && cfg && cfg.defeatPhrase) {
-            document.getElementById('botComment').innerText = `"${cfg.defeatPhrase}"`;
-            reason.innerText = cfg.defeatPhrase;
-          }
-        }
-      } else {
-        icon.innerText = '🤝';
-        title.innerText = '¡TABLAS POR AHOGADO!';
-        reason.innerText = 'El jugador en turno no tiene movimientos legales.';
-      }
-
-      updateEloUI();
-      finalElo.innerText = `${estimatedPlayerElo} ELO`;
-      modal.classList.remove('hidden');
-    }
-
-    // Evitar menú contextual del navegador sobre el tablero
     document.getElementById('boardWrapper').addEventListener('contextmenu', e => e.preventDefault());
 
-    // Inicializar perfil y vistas previas al cargar
+    loadFromCloud();
     initProfileAndStudioUI();
     syncProfileUI();
     renderCustomizationPreviews();
